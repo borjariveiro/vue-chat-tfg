@@ -29,7 +29,7 @@ export const useUserStore = defineStore('user', {
     },
     async doLogout() {
       await signOut(auth)
-      this.setUser(null)
+      this.$reset
     }
   }
 })
