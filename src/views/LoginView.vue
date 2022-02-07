@@ -52,7 +52,7 @@ async function doLogin() {
     router.push({ name: 'home' })
     toast.success('Sesion iniciada')
   } catch (error) {
-    toast.success(error.message)
+    toast.error(error.message)
     console.log(error.message)
   } finally {
     // isLoading.value = false
