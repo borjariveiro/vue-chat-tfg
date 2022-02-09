@@ -9,6 +9,8 @@ rootStore.checkAuth()
 </script>
 
 <template>
-  <TheHeader />
-  <RouterView />
+  <main class="h-screen bg-slate-900">
+    <TheHeader />
+    <RouterView />
+  </main>
 </template>
