@@ -8,7 +8,9 @@ import {
   onAuthStateChanged,
   updateEmail,
   updatePassword,
-  sendPasswordResetEmail
+  sendPasswordResetEmail,
+  GoogleAuthProvider,
+  signInWithPopup
 } from 'firebase/auth'
 
 export const useUserStore = defineStore('user', {
@@ -22,6 +24,11 @@ export const useUserStore = defineStore('user', {
 
     async doLogin({ email, password }) {
       await signInWithEmailAndPassword(auth, email, password)
+      this.setUser(auth.currentUser)
+    },
+    async doLoginWithGoogle() {
+      const provider = new GoogleAuthProvider()
+      await signInWithPopup(auth, provider)
       this.setUser(auth.currentUser)
     },
     async doRegister({ name, email, password }) {

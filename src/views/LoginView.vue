@@ -4,11 +4,11 @@ import { useUserStore } from '@/stores/user'
 import { useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
 import IconLogo from '@/components/icons/IconLogo.vue'
+import IconGoogle from '@/components/icons/IconGoogle.vue'
 
 const userStore = useUserStore()
 const router = useRouter()
 const toast = useToast()
-// const isLogin = ref(true)
 // const isLoading = ref(false)
 const userData = ref({
   email: '',
@@ -25,6 +25,20 @@ async function doLogin() {
     resetData()
     router.push({ name: 'chat' })
     toast.success('Sesion iniciada')
+  } catch (error) {
+    toast.error(error.message)
+    console.log(error.message)
+  } finally {
+    // isLoading.value = false
+  }
+}
+
+async function doLoginWithGoogle() {
+  // isLoading.value = true
+  try {
+    await userStore.doLoginWithGoogle()
+    router.push({ name: 'chat' })
+    toast.success('Sesion iniciada con cuenta de Google')
   } catch (error) {
     toast.error(error.message)
     console.log(error.message)
@@ -82,11 +96,23 @@ function resetData() {
         </router-link>
       </div>
       <button
+        type="submit"
         class="w-full px-5 py-2 text-base font-medium text-center text-white rounded-lg bg-emerald-700 hover:bg-emerald-800 focus:ring-4 focus:ring-emerald-300 dark:bg-emerald-600 dark:hover:bg-emerald-700 dark:focus:ring-emerald-800"
       >
         Sign in
       </button>
+      <div class="flex flex-col items-center mt-4 text-slate-400">
+        <p>Or log in with</p>
+        <button
+          @click="doLoginWithGoogle"
+          type="button"
+          class="p-1.5 mt-2 bg-gray-900 rounded-full"
+        >
+          <IconGoogle />
+        </button>
+      </div>
     </form>
+
     <div class="text-base">
       <label for="terms" class="font-medium text-gray-900 dark:text-gray-300">
         New to VueChat?
