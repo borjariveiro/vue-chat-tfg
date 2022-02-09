@@ -22,6 +22,9 @@
       />
       <button class="border-2 ml-3 px-2 py-1 rounded">Sign in</button>
     </form>
+    <router-link class="m-4 p-2 border-2 border-green-700" to="/password_reset"
+      >Don't have and account?
+    </router-link>
   </section>
 </template>
 

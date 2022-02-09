@@ -7,7 +7,8 @@ import {
   signOut,
   onAuthStateChanged,
   updateEmail,
-  updatePassword
+  updatePassword,
+  sendPasswordResetEmail
 } from 'firebase/auth'
 
 export const useUserStore = defineStore('user', {
@@ -33,6 +34,9 @@ export const useUserStore = defineStore('user', {
     async doLogout() {
       await signOut(auth)
       this.$reset
+    },
+    async doResetPassword({ email }) {
+      await sendPasswordResetEmail(auth, email)
     },
     async updateProfile({ name, email, password }) {
       const user = auth.currentUser
