@@ -4,7 +4,10 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   updateProfile,
-  signOut
+  signOut,
+  onAuthStateChanged,
+  updateEmail,
+  updatePassword
 } from 'firebase/auth'
 
 export const useUserStore = defineStore('user', {
@@ -30,6 +33,36 @@ export const useUserStore = defineStore('user', {
     async doLogout() {
       await signOut(auth)
       this.$reset
+    },
+    async updateProfile({ name, email, password }) {
+      const user = auth.currentUser
+      if (name) {
+        await updateProfile(user, { displayName: name })
+      }
+
+      if (email) {
+        await updateEmail(user, email)
+      }
+
+      if (password) {
+        await updatePassword(user, password)
+      }
+
+      this.setUser(user)
+    },
+    currentUser() {
+      return new Promise((resolve, reject) => {
+        const unsubscribe = onAuthStateChanged(
+          auth,
+          (user) => {
+            unsubscribe()
+            resolve(user)
+          },
+          () => {
+            reject()
+          }
+        )
+      })
     }
   }
 })

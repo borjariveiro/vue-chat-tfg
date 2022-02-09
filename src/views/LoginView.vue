@@ -49,7 +49,7 @@ async function doLogin() {
       password: userData.value.password
     })
     resetData()
-    router.push({ name: 'home' })
+    router.push({ name: 'chat' })
     toast.success('Sesion iniciada')
   } catch (error) {
     toast.error(error.message)
