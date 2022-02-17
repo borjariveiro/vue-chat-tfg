@@ -23,7 +23,7 @@ async function doLogin() {
       password: userData.value.password
     })
     resetData()
-    router.push({ name: 'chat' })
+    router.push({ name: 'rooms' })
     toast.success('Sesion iniciada')
   } catch (error) {
     toast.error(error.message)
@@ -37,7 +37,7 @@ async function doLoginWithGoogle() {
   // isLoading.value = true
   try {
     await userStore.doLoginWithGoogle()
-    router.push({ name: 'chat' })
+    router.push({ name: 'rooms' })
     toast.success('Sesion iniciada con cuenta de Google')
   } catch (error) {
     toast.error(error.message)

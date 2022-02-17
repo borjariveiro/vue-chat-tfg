@@ -6,7 +6,7 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'chat',
+      name: 'rooms',
       component: () => import('@/views/ChatView.vue'),
       meta: {
         requiresAuth: true
@@ -46,7 +46,7 @@ router.beforeEach(async (to, from, next) => {
     next({ name: 'login' })
     // No requires auth and user (auth)
   } else if (!requiresAuth && (await userStore.currentUser())) {
-    next({ name: 'chat' })
+    next({ name: 'rooms' })
   } else {
     // Anything else
     next()

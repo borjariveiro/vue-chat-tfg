@@ -27,7 +27,7 @@ async function doRegister() {
     })
     toast.success('Cuenta creada')
 
-    router.push({ name: 'chat' })
+    router.push({ name: 'rooms' })
   } catch (error) {
     toast.error(error.message)
     resetData()
