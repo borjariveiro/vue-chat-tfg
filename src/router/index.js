@@ -7,7 +7,24 @@ const router = createRouter({
     {
       path: '/',
       name: 'rooms',
-      component: () => import('@/views/ChatView.vue'),
+      component: () => import('@/views/RoomsView.vue'),
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/createRoom',
+      name: 'createRoom',
+      component: () => import('@/views/CreateRoomView.vue'),
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/update/:id',
+      name: 'updateRoom',
+      component: () => import('@/views/UpdateRoomView.vue'),
+      props: true,
       meta: {
         requiresAuth: true
       }
