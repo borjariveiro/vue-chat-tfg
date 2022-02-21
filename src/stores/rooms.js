@@ -30,20 +30,10 @@ export const useRoomsStore = defineStore('rooms', {
       }
     },
     async getRooms() {
-      // const rooms = []
-      // const querySnapshot = await getDocs(collection(db, 'rooms'))
-      // querySnapshot.forEach((doc) => {
-      //   let room = doc.data()
-      //   room.id = doc.id
-      //   rooms.push(room)
-      // })
-      // this.setRooms(rooms)
-
       const querySnapshot = await query(
         collection(db, 'rooms'),
         orderBy('createdAt', 'desc')
       )
-
       const unsuscribe = onSnapshot(querySnapshot, (snapshot) => {
         snapshot.docChanges().forEach((change) => {
           if (change.type === 'added') {
