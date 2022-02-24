@@ -23,12 +23,7 @@ const toast = useToast()
 
 onMounted(async () => {
   try {
-    let roomTemp = await roomsStore.rooms.find((room) => room.id === props.id)
-    if (!roomTemp) {
-      roomTemp = roomsStore.getRoomFromFirebase(props.id)
-      if (!roomTemp.exists) throw new Error('Could not find room')
-      roomTemp = roomTemp.data()
-    }
+    let roomTemp = roomsStore.getRoom(props.id)
     room.value.name = roomTemp.name
     room.value.description = roomTemp.description
   } catch (error) {

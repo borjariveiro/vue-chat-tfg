@@ -18,6 +18,11 @@ export const useRoomsStore = defineStore('rooms', {
     rooms: [],
     roomsListener: () => {}
   }),
+  getters: {
+    findRoom: (state) => {
+      return (roomId) => state.rooms.find((room) => room.id === roomId)
+    }
+  },
   actions: {
     setRooms(rooms) {
       this.rooms = rooms
@@ -28,6 +33,16 @@ export const useRoomsStore = defineStore('rooms', {
       } else {
         this.roomsListener()
       }
+    },
+    async getRoom(roomID) {
+      let room = this.findRoom(roomID)
+      if (!room) {
+        const docRef = doc(db, 'rooms', roomID)
+        room = await getDoc(docRef)
+        if (!room.exists) throw new Error('Could not find room')
+        room = room.data()
+      }
+      return room
     },
     async getRooms() {
       const querySnapshot = await query(
@@ -64,10 +79,7 @@ export const useRoomsStore = defineStore('rooms', {
         adminName: userStore.user.displayName
       })
     },
-    async getRoomFromFirebase(roomID) {
-      const docRef = doc(db, 'rooms', roomID)
-      return await getDoc(docRef)
-    },
+
     async updateRoom({ roomID, name, description }) {
       const roomData = {}
       if (name) roomData.name = name
