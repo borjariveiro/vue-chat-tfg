@@ -25,7 +25,7 @@ onMounted(async () => {
   try {
     let roomTemp = await roomsStore.rooms.find((room) => room.id === props.id)
     if (!roomTemp) {
-      roomTemp = roomsStore.getRoomFromFirestore(props.id)
+      roomTemp = roomsStore.getRoomFromFirebase(props.id)
       if (!roomTemp.exists) throw new Error('Could not find room')
       roomTemp = roomTemp.data()
     }

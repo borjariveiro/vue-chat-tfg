@@ -32,7 +32,7 @@ export const useRoomsStore = defineStore('rooms', {
     async getRooms() {
       const querySnapshot = await query(
         collection(db, 'rooms'),
-        orderBy('createdAt', 'desc')
+        orderBy('createdAt', 'asc')
       )
       const unsuscribe = onSnapshot(querySnapshot, (snapshot) => {
         snapshot.docChanges().forEach((change) => {
@@ -45,6 +45,7 @@ export const useRoomsStore = defineStore('rooms', {
             const roomData = change.doc.data()
             roomData.id = change.doc.id
             this.rooms[change.newIndex] = roomData
+            console.log(change.newIndex)
           }
           if (change.type === 'removed') {
             this.rooms.splice(change.oldIndex, 1)

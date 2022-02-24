@@ -17,11 +17,9 @@ const props = defineProps({
     :key="room.id"
     class="flex flex-col justify-between w-64 bg-white border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700"
   >
-    <!-- <a href="#">
-      <img class="rounded-t-lg" src="" alt="" />
-    </a> -->
-    <div class="px-5 pt-5">
-      <a href="#">
+    <router-link :to="{ name: 'chat', params: { id: room.id } }">
+      <!-- <img class="rounded-t-lg" src="" alt="" /> -->
+      <div class="px-5 pt-5">
         <h3
           :title="room.name"
           class="mb-2 text-2xl font-bold tracking-tight text-gray-900 truncate dark:text-white"
@@ -34,15 +32,15 @@ const props = defineProps({
         >
           By {{ room.adminName }}
         </h4>
-      </a>
-      <p
-        :title="room.description"
-        class="mb-2 font-normal text-gray-700 truncate dark:text-gray-400"
-      >
-        {{ room.description }}
-      </p>
-    </div>
 
+        <p
+          :title="room.description"
+          class="mb-2 font-normal text-gray-700 truncate dark:text-gray-400"
+        >
+          {{ room.description }}
+        </p>
+      </div>
+    </router-link>
     <div class="self-end px-5">
       <router-link
         :to="{ name: 'updateRoom', params: { id: room.id } }"
