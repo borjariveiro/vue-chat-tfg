@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { db } from '@/firebase'
 import { auth } from '@/firebase'
 import {
   signInWithEmailAndPassword,
@@ -12,6 +13,13 @@ import {
   GoogleAuthProvider,
   signInWithPopup
 } from 'firebase/auth'
+import {
+  query,
+  where,
+  getDocs,
+  collectionGroup,
+  runTransaction
+} from 'firebase/firestore'
 
 export const useUserStore = defineStore('user', {
   state: () => ({
@@ -54,6 +62,16 @@ export const useUserStore = defineStore('user', {
       const user = auth.currentUser
       if (name) {
         await updateProfile(user, { displayName: name })
+        await runTransaction(db, async (transaction) => {
+          const messages = await query(
+            collectionGroup(db, 'messages'),
+            where('userId', '==', this.user.uid)
+          )
+          const querySnapshot = await getDocs(messages)
+          querySnapshot.forEach((doc) => {
+            transaction.update(doc.ref, { userName: name })
+          })
+        })
       }
 
       if (email) {
