@@ -51,6 +51,22 @@ async function updateRoom() {
     isLoading.value = false
   }
 }
+async function removeRoom() {
+  isLoading.value = true
+  try {
+    await roomsStore.removeRoom({
+      roomID: props.id
+    })
+    toast.success('Sala borrada')
+    router.push({ name: 'rooms' })
+  } catch (error) {
+    toast.error(error.message)
+    console.log(error.message)
+    router.push({ name: 'rooms' })
+  } finally {
+    isLoading.value = false
+  }
+}
 </script>
 
 <template>
@@ -94,5 +110,12 @@ async function updateRoom() {
         Edit
       </button>
     </form>
+    <button
+      type="button"
+      @click="removeRoom"
+      class="w-auto px-5 py-2 text-base font-medium text-center text-white bg-red-700 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-emerald-300 dark:bg-red-700 dark:hover:bg-red-800 dark:focus:ring-emerald-800 disabled:opacity-50 disabled:cursor-not-allowed"
+    >
+      Delete room
+    </button>
   </section>
 </template>

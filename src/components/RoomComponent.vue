@@ -1,7 +1,14 @@
 <script setup>
 const props = defineProps({
-  rooms: Array
+  rooms: Array,
+  unreadMessages: Array
 })
+
+function hasUnreadMessages(roomId) {
+  return props.unreadMessages.filter((message) => {
+    return message.roomId === roomId
+  })
+}
 </script>
 
 <template>
@@ -20,6 +27,9 @@ const props = defineProps({
     <router-link :to="{ name: 'chat', params: { id: room.id } }">
       <!-- <img class="rounded-t-lg" src="" alt="" /> -->
       <div class="px-5 pt-5">
+        <div v-if="hasUnreadMessages(room.id).length" class="text-red-600">
+          {{ hasUnreadMessages(room.id).length }} unread messages
+        </div>
         <h3
           :title="room.name"
           class="mb-2 text-2xl font-bold tracking-tight text-gray-900 truncate dark:text-white"

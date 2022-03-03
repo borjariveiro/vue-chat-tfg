@@ -6,7 +6,8 @@ import {
   Timestamp,
   orderBy,
   onSnapshot,
-  query
+  query,
+  collectionGroup
 } from 'firebase/firestore'
 import { useUserStore } from './user'
 
@@ -26,9 +27,9 @@ export const useMessagesStore = defineStore('messages', {
         this.messagesListener()
       }
     },
-    async getMessages(roomId) {
+    async getMessages() {
       const q = await query(
-        collection(db, `rooms/${roomId}/messages`),
+        collectionGroup(db, 'messages'),
         orderBy('createdAt', 'desc')
       )
       const unsubscribe = onSnapshot(q, (querySnapshot) => {
@@ -47,6 +48,7 @@ export const useMessagesStore = defineStore('messages', {
       await addDoc(collection(db, `rooms/${roomId}/messages`), {
         userId: userStore.user.uid,
         userName: userStore.user.displayName,
+        roomId,
         message,
         createdAt: Timestamp.fromDate(new Date())
       })

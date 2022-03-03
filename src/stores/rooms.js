@@ -9,7 +9,8 @@ import {
   updateDoc,
   query,
   onSnapshot,
-  orderBy
+  orderBy,
+  deleteDoc
 } from 'firebase/firestore'
 import { useUserStore } from './user'
 
@@ -86,6 +87,19 @@ export const useRoomsStore = defineStore('rooms', {
       if (description) roomData.description = description
       const docRef = doc(db, 'rooms', roomID)
       return await updateDoc(docRef, roomData)
+    },
+    async removeRoom({ roomID }) {
+      const rooms = doc(db, 'rooms', roomID)
+      console.log(rooms)
+      const messages = await query(collection(db, `rooms/${roomID}/messages`))
+      const unsubscribe = onSnapshot(messages, (querySnapshot) => {
+        querySnapshot.forEach(async (document) => {
+          const message = doc(db, `rooms/${roomID}/messages`, document.id)
+          await deleteDoc(message)
+        })
+      })
+      await deleteDoc(rooms)
+      unsubscribe()
     }
   }
 })

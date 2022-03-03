@@ -1,9 +1,24 @@
 <script setup>
 import RoomComponent from '@/components/RoomComponent.vue'
 import IconSearch from '@/components/icons/IconSearch.vue'
+import { useUserStore } from '@/stores/user'
 import { useRoomsStore } from '@/stores/rooms'
+import { useMessagesStore } from '@/stores/messages'
+import { computed } from 'vue'
 
+const userStore = useUserStore()
 const roomsStore = useRoomsStore()
+const messagesStore = useMessagesStore()
+
+const unreadMessages = computed(() => {
+  return messagesStore.messages.filter((message) => {
+    return (
+      userStore.meta.joined[message.roomId].toMillis() &&
+      userStore.meta.joined[message.roomId].toMillis() <
+        message.createdAt.toMillis()
+    )
+  })
+})
 </script>
 
 <template>
@@ -31,6 +46,9 @@ const roomsStore = useRoomsStore()
     </div>
   </div>
   <section class="container flex flex-wrap gap-4 px-4 mx-auto mt-8">
-    <RoomComponent :rooms="roomsStore.rooms" />
+    <RoomComponent
+      :rooms="roomsStore.rooms"
+      :unread-messages="unreadMessages"
+    />
   </section>
 </template>
