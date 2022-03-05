@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useRoomsStore } from '@/stores/rooms'
 import { useToast } from 'vue-toastification'
 import { useRouter } from 'vue-router'
@@ -7,18 +7,40 @@ import { useRouter } from 'vue-router'
 const roomsStore = useRoomsStore()
 const router = useRouter()
 const toast = useToast()
+const image = ref('')
+const file = ref('')
 const roomData = ref({
   name: '',
-  description: ''
+  description: '',
+  imageURL: ''
 })
 const isLoading = ref(false)
+
+const roomImage = computed(() => {
+  return image.value ? URL.createObjectURL(image.value) : ''
+})
 
 async function createRoom() {
   isLoading.value = true
   try {
+    // const newRoom = await roomsStore.getNewRoomId
+    // console.log(newRoom)
+    // const roomId = newRoom.id
+
+    const roomId = await roomsStore.getNewRoomId()
+    console.log(roomId)
+
+    if (image.value) {
+      roomData.value.imageURL = await roomsStore.uploadRoomImage({
+        roomId,
+        file: image.value
+      })
+    }
     await roomsStore.createRoom({
       name: roomData.value.name,
-      description: roomData.value.description
+      description: roomData.value.description,
+      image: roomData.value.imageURL,
+      roomId
     })
     resetData()
     router.push({ name: 'rooms' })
@@ -31,8 +53,16 @@ async function createRoom() {
   }
 }
 
+function onFileChange(event) {
+  image.value = event.target.files[0]
+  file.value = null
+}
+
 function resetData() {
-  roomData.value.name = roomData.value.description = ''
+  roomData.value.name =
+    roomData.value.description =
+    roomData.value.imageURL =
+      ''
 }
 </script>
 
@@ -69,6 +99,37 @@ function resetData() {
           class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-900 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           placeholder="Write a description for your room"
         ></textarea>
+      </div>
+      <div class="mb-6">
+        <div
+          class="w-auto h-40 mb-2 bg-no-repeat bg-contain"
+          :style="{
+            'background-image': `url(${roomImage})`
+          }"
+        >
+          <button
+            href="#"
+            v-if="image"
+            @click.prevent="image = roomData.imageURL = null"
+            class="float-right font-black text-red-700"
+          >
+            X
+          </button>
+        </div>
+
+        <label
+          class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+          for="user_avatar"
+          >Upload file</label
+        >
+        <input
+          class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+          aria-describedby="user_avatar_help"
+          id="user_avatar"
+          type="file"
+          @change="onFileChange"
+          ref="file"
+        />
       </div>
       <button
         type="submit"

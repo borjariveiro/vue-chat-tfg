@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { db } from '@/firebase'
+import { db, storage } from '@/firebase'
 import {
   collection,
   addDoc,
@@ -10,8 +10,10 @@ import {
   query,
   onSnapshot,
   orderBy,
-  deleteDoc
+  deleteDoc,
+  setDoc
 } from 'firebase/firestore'
+import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
 import { useUserStore } from './user'
 
 export const useRoomsStore = defineStore('rooms', {
@@ -33,6 +35,22 @@ export const useRoomsStore = defineStore('rooms', {
         this.roomsListener = listener
       } else {
         this.roomsListener()
+      }
+    },
+    async getNewRoomId() {
+      const docRef = await addDoc(collection(db, 'rooms'), {})
+      console.log(docRef.id)
+      return docRef.id
+    },
+
+    async uploadRoomImage({ roomId, file }) {
+      try {
+        let filename = `rooms/${roomId}/${roomId}-image.jpg`
+        const storageRef = ref(storage, filename)
+        let uploadTask = await uploadBytesResumable(storageRef, file)
+        return await getDownloadURL(uploadTask.ref)
+      } catch (error) {
+        throw Error(error.message)
       }
     },
     async getRoom(roomID) {
@@ -70,14 +88,15 @@ export const useRoomsStore = defineStore('rooms', {
       })
       this.setRoomsListener(unsuscribe)
     },
-    async createRoom({ name, description }) {
+    async createRoom({ name, description, image, roomId }) {
       const userStore = useUserStore()
-      await addDoc(collection(db, 'rooms'), {
+      await setDoc(doc(db, 'rooms', roomId), {
         name,
         description,
         createdAt: Timestamp.fromDate(new Date()),
         adminUid: userStore.user.uid,
-        adminName: userStore.user.displayName
+        adminName: userStore.user.displayName,
+        image
       })
     },
 
