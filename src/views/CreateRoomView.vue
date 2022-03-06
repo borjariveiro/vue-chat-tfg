@@ -4,31 +4,31 @@ import { useRoomsStore } from '@/stores/rooms'
 import { useToast } from 'vue-toastification'
 import { useRouter } from 'vue-router'
 
-const roomsStore = useRoomsStore()
-const router = useRouter()
-const toast = useToast()
-const image = ref('')
-const file = ref('')
+// Data
 const roomData = ref({
   name: '',
   description: '',
   imageURL: ''
 })
+const image = ref('')
+const file = ref('')
 const isLoading = ref(false)
 
+// Computed properties
 const roomImage = computed(() => {
   return image.value ? URL.createObjectURL(image.value) : ''
 })
 
+// Stores and utils
+const roomsStore = useRoomsStore()
+const router = useRouter()
+const toast = useToast()
+
+// Methods
 async function createRoom() {
   isLoading.value = true
   try {
-    // const newRoom = await roomsStore.getNewRoomId
-    // console.log(newRoom)
-    // const roomId = newRoom.id
-
     const roomId = await roomsStore.getNewRoomId()
-    console.log(roomId)
 
     if (image.value) {
       roomData.value.imageURL = await roomsStore.uploadRoomImage({

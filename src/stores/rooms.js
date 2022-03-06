@@ -39,7 +39,6 @@ export const useRoomsStore = defineStore('rooms', {
     },
     async getNewRoomId() {
       const docRef = await addDoc(collection(db, 'rooms'), {})
-      console.log(docRef.id)
       return docRef.id
     },
 
@@ -79,7 +78,6 @@ export const useRoomsStore = defineStore('rooms', {
             const roomData = change.doc.data()
             roomData.id = change.doc.id
             this.rooms[change.newIndex] = roomData
-            console.log(change.newIndex)
           }
           if (change.type === 'removed') {
             this.rooms.splice(change.oldIndex, 1)
@@ -100,10 +98,12 @@ export const useRoomsStore = defineStore('rooms', {
       })
     },
 
-    async updateRoom({ roomID, name, description }) {
+    async updateRoom({ roomID, name, description, image }) {
       const roomData = {}
       if (name) roomData.name = name
       if (description) roomData.description = description
+      roomData.image = image
+
       const docRef = doc(db, 'rooms', roomID)
       return await updateDoc(docRef, roomData)
     },

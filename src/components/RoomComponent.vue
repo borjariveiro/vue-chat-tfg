@@ -4,13 +4,6 @@ const props = defineProps({
   unreadMessages: Array
 })
 
-// function getRoomImage(roomId) {
-//   const room = props.rooms.find((room) => {
-//     console.log(room)
-//     room.id === roomId
-//   })
-//   return room.image
-// }
 function hasUnreadMessages(roomId) {
   return props.unreadMessages.filter((message) => {
     return message.roomId === roomId

@@ -1,9 +1,10 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useRoomsStore } from '@/stores/rooms'
 import { useToast } from 'vue-toastification'
 import { useRouter } from 'vue-router'
 
+// Props
 const props = defineProps({
   id: {
     type: String,
@@ -11,21 +12,34 @@ const props = defineProps({
   }
 })
 
+// Data
 const room = ref({
   name: '',
   description: ''
 })
-
+const image = ref('')
+const imageURL = ref('')
+const file = ref(null)
 const isLoading = ref(false)
+let roomTemp = null
+
+//Computed properties
+const roomImage = computed(() => {
+  return imageURL.value
+})
+
+console.log(roomImage)
+// Stores and utils
 const roomsStore = useRoomsStore()
 const router = useRouter()
 const toast = useToast()
 
 onMounted(async () => {
   try {
-    let roomTemp = roomsStore.getRoom(props.id)
+    roomTemp = await roomsStore.getRoom(props.id)
     room.value.name = roomTemp.name
     room.value.description = roomTemp.description
+    imageURL.value = roomTemp.image
   } catch (error) {
     console.log(error.message)
     toast.error(error.message)
@@ -35,11 +49,20 @@ onMounted(async () => {
 
 async function updateRoom() {
   isLoading.value = true
+
+  if (image.value) {
+    imageURL.value = await roomsStore.uploadRoomImage({
+      roomId: props.id,
+      file: image.value
+    })
+  }
+
   try {
     await roomsStore.updateRoom({
       roomID: props.id,
       name: room.value.name,
-      description: room.value.description
+      description: room.value.description,
+      image: imageURL.value
     })
     toast.success('Sala editada')
     router.push({ name: 'rooms' })
@@ -66,6 +89,17 @@ async function removeRoom() {
   } finally {
     isLoading.value = false
   }
+}
+
+function onFileChange(event) {
+  image.value = event.target.files[0]
+  imageURL.value = URL.createObjectURL(image.value)
+  file.value = null
+}
+
+function onFileDelete() {
+  image.value = null
+  imageURL.value = roomTemp.image
 }
 </script>
 
@@ -102,6 +136,37 @@ async function removeRoom() {
           class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-900 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           placeholder="Write a description for your room"
         ></textarea>
+      </div>
+      <div class="mb-6">
+        <div
+          class="w-auto h-40 mb-2 bg-no-repeat bg-contain"
+          :style="{
+            'background-image': `url(${roomImage})`
+          }"
+        >
+          <button
+            href="#"
+            v-if="image"
+            @click.prevent="onFileDelete"
+            class="float-right font-black text-red-700"
+          >
+            X
+          </button>
+        </div>
+
+        <label
+          class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+          for="user_avatar"
+          >Upload file</label
+        >
+        <input
+          class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+          aria-describedby="user_avatar_help"
+          id="user_avatar"
+          type="file"
+          @change="onFileChange"
+          ref="file"
+        />
       </div>
       <button
         type="submit"
