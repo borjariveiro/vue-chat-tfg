@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { db } from '@/firebase'
+import { db, storage } from '@/firebase'
 import {
   collection,
   addDoc,
@@ -9,6 +9,7 @@ import {
   query,
   collectionGroup
 } from 'firebase/firestore'
+import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
 import { useUserStore } from './user'
 
 export const useMessagesStore = defineStore('messages', {
@@ -43,15 +44,28 @@ export const useMessagesStore = defineStore('messages', {
       })
       this.setMessagesListener(unsubscribe)
     },
-    async createMessage({ roomId, message }) {
+    async createMessage({ roomId, message, image }) {
       const userStore = useUserStore()
       await addDoc(collection(db, `rooms/${roomId}/messages`), {
         userId: userStore.user.uid,
         userName: userStore.user.displayName,
         roomId,
         message,
+        image,
         createdAt: Timestamp.fromDate(new Date())
       })
+    },
+    async uploadMessageImage({ roomId, file }) {
+      const userStore = useUserStore()
+      const timestamp = Date.now()
+      try {
+        let filename = `rooms/${roomId}/messages/${userStore.getUserUid}-${timestamp}.jpg`
+        const storageRef = ref(storage, filename)
+        let uploadTask = await uploadBytesResumable(storageRef, file)
+        return await getDownloadURL(uploadTask.ref)
+      } catch (error) {
+        throw Error(error.message)
+      }
     }
   }
 })

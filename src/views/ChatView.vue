@@ -1,5 +1,6 @@
 <script setup>
 import IconLogo from '@/components/icons/IconLogo.vue'
+import IconClip from '@/components/icons/IconClip.vue'
 import { ref, nextTick, onMounted, onUnmounted, computed } from 'vue'
 import { useRoomsStore } from '@/stores/rooms'
 import { useToast } from 'vue-toastification'
@@ -9,12 +10,14 @@ import { useUserStore } from '@/stores/user'
 import { formatRelative } from 'date-fns'
 import { es } from 'date-fns/locale'
 
+// Stores and utils
 const userStore = useUserStore()
 const roomsStore = useRoomsStore()
 const messagesStore = useMessagesStore()
 const router = useRouter()
 const toast = useToast()
 
+// Props
 const props = defineProps({
   id: {
     type: String,
@@ -22,17 +25,26 @@ const props = defineProps({
   }
 })
 
+// Data
 const room = ref({
   name: '',
   description: ''
 })
-const message = ref('')
 const chat = ref('')
+const message = ref('')
 const messages = ref()
+const image = ref()
+const file = ref()
+const fileURL = ref()
 
+//Computed properties
 const roomMessages = computed(() => {
   return messagesStore.messages.filter((message) => message.roomId === props.id)
 })
+
+const messageImage = () => {
+  return URL.createObjectURL(image.value)
+}
 
 onMounted(async () => {
   try {
@@ -44,6 +56,7 @@ onMounted(async () => {
       exit: false,
       uid: userStore.user.uid
     })
+    scrollDown()
   } catch (error) {
     console.log(error.message)
     toast.error(error.message)
@@ -53,16 +66,30 @@ onMounted(async () => {
 
 async function createMessage() {
   try {
+    if (image.value) {
+      fileURL.value = await messagesStore.uploadMessageImage({
+        roomId: props.id,
+        file: image.value
+      })
+    }
     await messagesStore.createMessage({
       roomId: props.id,
-      message: message.value
+      message: message.value,
+      image: fileURL.value
     })
     scrollDown()
     message.value = ''
+    image.value = fileURL.value = null
   } catch (error) {
     toast.error(error.message)
     console.log(error.message)
   }
+}
+
+function onFileChange(event) {
+  image.value = event.target.files[0]
+  fileURL.value = URL.createObjectURL(image.value)
+  file.value = null
 }
 
 function scrollDown() {
@@ -106,6 +133,11 @@ onUnmounted(() => {
             'dark:bg-emerald-600': message.userId === userStore.getUserUid
           }"
         >
+          <div
+            v-if="message.image"
+            class="w-64 h-64 bg-center bg-cover"
+            :style="{ 'background-image': `url(${message.image})` }"
+          ></div>
           <span
             v-if="message.userId !== userStore.getUserUid"
             class="text-sm text-gray-400"
@@ -129,8 +161,18 @@ onUnmounted(() => {
           placerholder="Message"
           class="rounded"
         />
+        <div
+          v-if="image"
+          @click="image = null"
+          class="bg-center bg-cover w-80 h-80"
+          :style="{ 'background-image': `url(${messageImage()})` }"
+        ></div>
+        <div class="inline">
+          <button type="button" @click="file.click()"><IconClip /></button>
+          <input type="file" @change="onFileChange" ref="file" class="hidden" />
+        </div>
         <button :disabled="!message" class="text-white">
-          <IconLogo />Send
+          <IconLogo />
         </button>
       </form>
     </section>

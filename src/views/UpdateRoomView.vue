@@ -28,7 +28,6 @@ const roomImage = computed(() => {
   return imageURL.value
 })
 
-console.log(roomImage)
 // Stores and utils
 const roomsStore = useRoomsStore()
 const router = useRouter()
