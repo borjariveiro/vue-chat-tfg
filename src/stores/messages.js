@@ -7,9 +7,16 @@ import {
   orderBy,
   onSnapshot,
   query,
-  collectionGroup
+  collectionGroup,
+  deleteDoc,
+  doc
 } from 'firebase/firestore'
-import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
+import {
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+  deleteObject
+} from 'firebase/storage'
 import { useUserStore } from './user'
 
 export const useMessagesStore = defineStore('messages', {
@@ -66,6 +73,14 @@ export const useMessagesStore = defineStore('messages', {
       } catch (error) {
         throw Error(error.message)
       }
+    },
+    async deleteMessage({ roomId, messageId }) {
+      const message = doc(db, `rooms/${roomId}/messages`, messageId)
+      await deleteDoc(message)
+    },
+    async deleteFile(file) {
+      const fileRef = ref(storage, file)
+      await deleteObject(fileRef)
     }
   }
 })

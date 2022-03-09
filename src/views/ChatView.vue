@@ -30,12 +30,12 @@ const room = ref({
   name: '',
   description: ''
 })
-const chat = ref('')
-const message = ref('')
-const messages = ref()
-const image = ref()
-const file = ref()
-const fileURL = ref()
+const chat = ref(null)
+const message = ref(null)
+const messages = ref(null)
+const image = ref(null)
+const file = ref(null)
+const fileURL = ref(null)
 
 //Computed properties
 const roomMessages = computed(() => {
@@ -67,11 +67,13 @@ onMounted(async () => {
 async function createMessage() {
   try {
     if (image.value) {
+      console.log('entro')
       fileURL.value = await messagesStore.uploadMessageImage({
         roomId: props.id,
         file: image.value
       })
     }
+    console.log(fileURL.value)
     await messagesStore.createMessage({
       roomId: props.id,
       message: message.value,
@@ -80,6 +82,32 @@ async function createMessage() {
     scrollDown()
     message.value = ''
     image.value = fileURL.value = null
+  } catch (error) {
+    toast.error(error.message)
+    console.log(error.message)
+  }
+}
+
+async function deleteMessage(messageId) {
+  try {
+    const message = roomMessages.value.find((message) => {
+      return message.id === messageId
+    })
+    // console.log(message)
+    // console.log(
+    //   roomMessages.value.find((message) => {
+    //     console.log(message.id === messageId)
+    //     console.log(messageId)
+    //     message.id === messageId
+    //   })
+    // )
+    if (message.image) {
+      await messagesStore.deleteFile(message.image)
+    }
+    await messagesStore.deleteMessage({
+      roomId: props.id,
+      messageId: message.id
+    })
   } catch (error) {
     toast.error(error.message)
     console.log(error.message)
@@ -133,6 +161,13 @@ onUnmounted(() => {
             'dark:bg-emerald-600': message.userId === userStore.getUserUid
           }"
         >
+          <button
+            type="button"
+            v-if="message.userId === userStore.getUserUid"
+            @click="deleteMessage(message.id)"
+          >
+            Borrar
+          </button>
           <div
             v-if="message.image"
             class="w-64 h-64 bg-center bg-cover"
