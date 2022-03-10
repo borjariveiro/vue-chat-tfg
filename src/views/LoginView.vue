@@ -53,11 +53,18 @@ function resetData() {
 </script>
 
 <template>
-  <section class="flex flex-col items-center gap-4 pt-10">
-    <router-link to="/">
-      <IconLogo />
-    </router-link>
-    <h1 class="text-2xl font-medium text-slate-200">Log in to VueChat</h1>
+  <section class="flex flex-col items-center gap-6 pt-16">
+    <div class="flex">
+      <IconLogo :width="80" :height="80" />
+      <h1
+        class="self-center text-3xl font-semibold sm:text-4xl whitespace-nowrap text-slate-200"
+      >
+        VueChat
+      </h1>
+    </div>
+    <h2 class="text-3xl font-light font-medium sm:text-4xl text-slate-200">
+      Log in to VueChat
+    </h2>
     <form @submit.prevent="doLogin" class="p-4 bg-gray-800 rounded-lg w-80">
       <div class="mb-6">
         <label
@@ -71,7 +78,7 @@ function resetData() {
           required
           name="email"
           id="email"
-          class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-emerald-500 focus:border-emerald-500 block w-full p-2.5 dark:bg-gray-900 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-emerald-500 dark:focus:border-emerald-500 dark:shadow-sm-light"
+          class="input-form"
         />
       </div>
       <div class="mb-6">
@@ -86,7 +93,7 @@ function resetData() {
           required
           name="password"
           id="password"
-          class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-emerald-500 focus:border-emerald-500 block w-full p-2.5 dark:bg-gray-900 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-emerald-500 dark:focus:border-emerald-500 dark:shadow-sm-light"
+          class="input-form"
         />
         <router-link
           to="/password_reset"
@@ -95,12 +102,7 @@ function resetData() {
           Forgot your password?
         </router-link>
       </div>
-      <button
-        type="submit"
-        class="w-full px-5 py-2 text-base font-medium text-center text-white rounded-lg bg-emerald-700 hover:bg-emerald-800 focus:ring-4 focus:ring-emerald-300 dark:bg-emerald-600 dark:hover:bg-emerald-700 dark:focus:ring-emerald-800"
-      >
-        Sign in
-      </button>
+      <button type="submit" class="btn-primary">Sign in</button>
       <div class="flex flex-col items-center mt-4 text-slate-400">
         <p>Or log in with</p>
         <button

@@ -1,6 +1,5 @@
 <script setup>
 import { RouterView } from 'vue-router'
-import TheHeader from '@/components/TheHeader.vue'
 import { useRootStore } from '@/stores/root'
 
 // Initialize auth
@@ -10,7 +9,6 @@ rootStore.checkAuth()
 
 <template>
   <main class="h-screen bg-slate-900">
-    <TheHeader />
     <Transition name="fade" mode="out-in">
       <RouterView />
     </Transition>

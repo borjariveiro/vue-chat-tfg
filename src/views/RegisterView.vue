@@ -43,13 +43,19 @@ function resetData() {
 </script>
 
 <template>
-  <section class="flex flex-col items-center gap-4 mt-10">
-    <router-link to="/">
-      <IconLogo />
+  <section class="flex flex-col items-center gap-6 pt-16">
+    <router-link to="/" class="flex">
+      <IconLogo :width="80" :height="80" />
+      <h1
+        class="self-center text-2xl font-semibold sm:text-4xl whitespace-nowrap text-slate-200"
+      >
+        VueChat
+      </h1>
     </router-link>
-    <h1 class="text-2xl font-medium text-slate-200">
+    <h2 class="text-2xl font-light sm:text-4xl text-slate-200">
       Create account to VueChat
-    </h1>
+    </h2>
+
     <form @submit.prevent="doRegister" class="p-4 bg-gray-800 rounded-lg w-80">
       <div class="mb-4">
         <label
@@ -62,7 +68,7 @@ function resetData() {
           v-model="userData.name"
           type="text"
           required
-          class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-emerald-500 focus:border-emerald-500 block w-full p-2.5 dark:bg-gray-900 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-emerald-500 dark:focus:border-emerald-500 dark:shadow-sm-light"
+          class="input-form"
         />
       </div>
       <div class="mb-4">
@@ -76,7 +82,7 @@ function resetData() {
           v-model="userData.email"
           type="email"
           required
-          class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-emerald-500 focus:border-emerald-500 block w-full p-2.5 dark:bg-gray-900 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-emerald-500 dark:focus:border-emerald-500 dark:shadow-sm-light"
+          class="input-form"
         />
       </div>
       <div class="mb-4">
@@ -90,14 +96,10 @@ function resetData() {
           v-model="userData.password"
           type="password"
           required
-          class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-emerald-500 focus:border-emerald-500 block w-full p-2.5 dark:bg-gray-900 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-emerald-500 dark:focus:border-emerald-500 dark:shadow-sm-light"
+          class="input-form"
         />
       </div>
-      <button
-        class="w-full px-5 py-2 text-base font-medium text-center text-white rounded-lg bg-emerald-700 hover:bg-emerald-800 focus:ring-4 focus:ring-emerald-300 dark:bg-emerald-600 dark:hover:bg-emerald-700 dark:focus:ring-emerald-800"
-      >
-        Create account
-      </button>
+      <button class="btn-primary">Create account</button>
     </form>
     <div class="text-base">
       <label for="terms" class="font-medium text-gray-900 dark:text-gray-300">

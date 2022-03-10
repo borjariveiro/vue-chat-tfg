@@ -3,7 +3,6 @@ import { computed } from 'vue'
 import { useUserStore } from '@/stores/user'
 import { useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
-// import IconBase from './IconBase.vue'
 import IconLogo from './icons/IconLogo.vue'
 
 const userStore = useUserStore()
