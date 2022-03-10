@@ -62,7 +62,7 @@ function resetData() {
         VueChat
       </h1>
     </div>
-    <h2 class="text-3xl font-light font-medium sm:text-4xl text-slate-200">
+    <h2 class="text-3xl font-light sm:text-4xl text-slate-200">
       Log in to VueChat
     </h2>
     <form @submit.prevent="doLogin" class="p-4 bg-gray-800 rounded-lg w-80">
