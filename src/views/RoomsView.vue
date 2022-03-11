@@ -1,29 +1,34 @@
 <script setup>
-import RoomComponent from '@/components/RoomComponent.vue'
-import IconSearch from '@/components/icons/IconSearch.vue'
-import { useUserStore } from '@/stores/user'
-import { useRoomsStore } from '@/stores/rooms'
-import { useMessagesStore } from '@/stores/messages'
-import { computed } from 'vue'
+// import RoomComponent from '@/components/RoomComponent.vue'
+// import IconSearch from '@/components/icons/IconSearch.vue'
+// import { useUserStore } from '@/stores/user'
+// import { useRoomsStore } from '@/stores/rooms'
+// import { useMessagesStore } from '@/stores/messages'
+// import { computed } from 'vue'
+import SidebarComponent from '../components/SidebarComponent.vue'
 
-const userStore = useUserStore()
-const roomsStore = useRoomsStore()
-const messagesStore = useMessagesStore()
+// const userStore = useUserStore()
+// const roomsStore = useRoomsStore()
+// const messagesStore = useMessagesStore()
 
-const unreadMessages = computed(() => {
-  return messagesStore.messages.filter((message) => {
-    return (
-      userStore.meta.joined[message.roomId].toMillis() &&
-      userStore.meta.joined[message.roomId].toMillis() <
-        message.createdAt.toMillis()
-    )
-  })
-})
+// const unreadMessages = computed(() => {
+//   return messagesStore.messages.filter((message) => {
+//     return (
+//       userStore.meta.joined[message.roomId].toMillis() &&
+//       userStore.meta.joined[message.roomId].toMillis() <
+//         message.createdAt.toMillis()
+//     )
+//   })
+// })
 </script>
 
 <template>
-  <div
-    class="container flex flex-wrap items-center justify-between px-4 mx-auto mt-8"
+  <div class="grid grid-cols-[2fr_5fr] h-full">
+    <SidebarComponent />
+    <div class="text-white border-2 border-emerald-500">Chat</div>
+  </div>
+  <!-- <div
+    class="container flex flex-wrap items-center justify-between px-4 mx-auto"
   >
     <router-link
       to="/createRoom"
@@ -44,11 +49,11 @@ const unreadMessages = computed(() => {
         class="shadow-sm bg-gray-50 border-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-emerald-500 focus:border-emerald-500 block p-2.5 pl-10 dark:bg-gray-900 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-emerald-500 dark:focus:border-emerald-500 dark:shadow-sm-light w-44 sm:w-48"
       />
     </div>
-  </div>
-  <section class="container flex flex-wrap gap-4 px-4 mx-auto mt-8">
+  </div> -->
+  <!-- <section class="container flex flex-wrap gap-4 px-4 mx-auto mt-8">
     <RoomComponent
       :rooms="roomsStore.rooms"
       :unread-messages="unreadMessages"
     />
-  </section>
+  </section> -->
 </template>
