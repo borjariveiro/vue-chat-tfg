@@ -206,8 +206,8 @@ onUnmounted(() => {
           <button type="button" @click="file.click()"><IconClip /></button>
           <input type="file" @change="onFileChange" ref="file" class="hidden" />
         </div>
-        <button :disabled="!message" class="text-white">
-          <IconLogo />
+        <button :disabled="!message" class="text-white w">
+          <IconLogo :width="50" :height="50" />
         </button>
       </form>
     </section>

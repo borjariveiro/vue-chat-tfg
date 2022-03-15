@@ -25,7 +25,7 @@ import SidebarComponent from '../components/SidebarComponent.vue'
 <template>
   <div class="grid grid-cols-[2fr_5fr] h-full">
     <SidebarComponent />
-    <div class="text-white border-2 border-emerald-500">Chat</div>
+    <div class="text-white">Chat</div>
   </div>
   <!-- <div
     class="container flex flex-wrap items-center justify-between px-4 mx-auto"

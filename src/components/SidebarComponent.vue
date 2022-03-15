@@ -1,15 +1,18 @@
 <script setup>
 import { useUserStore } from '@/stores/user'
 import { useRoomsStore } from '@/stores/rooms'
+import { useMessagesStore } from '@/stores/messages'
 import { useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
 import RoomComponent from '@/components/RoomComponent.vue'
 import IconLogo from './icons/IconLogo.vue'
 import IconSearch from './icons/IconSearch.vue'
 import IconPlus from './icons/IconPlus.vue'
+import { computed } from 'vue'
 
 const userStore = useUserStore()
 const roomsStore = useRoomsStore()
+const messagesStore = useMessagesStore()
 const router = useRouter()
 const toast = useToast()
 
@@ -23,10 +26,20 @@ async function doLogout() {
     console.log(error.message)
   }
 }
+
+const unreadMessages = computed(() => {
+  return messagesStore.messages.filter((message) => {
+    return (
+      userStore.meta.joined[message.roomId].toMillis() &&
+      userStore.meta.joined[message.roomId].toMillis() <
+        message.createdAt.toMillis()
+    )
+  })
+})
 </script>
 
 <template>
-  <div class="flex flex-col h-full overflow-hidden">
+  <div class="flex flex-col h-full overflow-hidden border-r border-slate-700">
     <!-- Header -->
     <header class="flex items-center justify-between h-20 p-1 bg-gray-800">
       <div class="flex mr-4">
@@ -64,7 +77,10 @@ async function doLogout() {
 
     <!-- Rooms -->
     <section class="flex flex-col w-full overflow-y-auto">
-      <RoomComponent :rooms="roomsStore.rooms" />
+      <RoomComponent
+        :rooms="roomsStore.rooms"
+        :unread-messages="unreadMessages"
+      />
     </section>
   </div>
 </template>

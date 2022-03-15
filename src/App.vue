@@ -9,6 +9,11 @@ rootStore.checkAuth()
 
 <template>
   <main class="h-screen bg-slate-900">
+    <!-- <router-view v-slot="{ Component, route }">
+      <transition name="fade" mode="out-in">
+        <component :is="Component" :key="route.path" />
+      </transition>
+    </router-view> -->
     <Transition name="fade" mode="out-in">
       <RouterView />
     </Transition>

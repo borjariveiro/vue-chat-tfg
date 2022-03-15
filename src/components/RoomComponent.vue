@@ -4,11 +4,11 @@ const props = defineProps({
   unreadMessages: Array
 })
 
-// function hasUnreadMessages(roomId) {
-//   return props.unreadMessages.filter((message) => {
-//     return message.roomId === roomId
-//   })
-// }
+function hasUnreadMessages(roomId) {
+  return props.unreadMessages.filter((message) => {
+    return message.roomId === roomId
+  })
+}
 </script>
 
 <template>
@@ -26,11 +26,19 @@ const props = defineProps({
   >
     <router-link :to="{ name: 'chat', params: { id: room.id } }" class="w-full">
       <div class="flex items-center p-2">
-        <img
-          class="object-cover w-16 h-16 rounded-full"
-          :src="room.image"
-          :alt="room.description"
-        />
+        <div class="relative">
+          <img
+            class="object-cover w-16 h-16 rounded-full"
+            :src="room.image"
+            :alt="room.description"
+          />
+          <span
+            v-if="hasUnreadMessages(room.id).length"
+            class="absolute top-0 right-0 flex items-center justify-center w-6 h-6 bg-green-500 border-2 rounded-full text border-slate-300 text-slate-200"
+          >
+            {{ hasUnreadMessages(room.id).length }}</span
+          >
+        </div>
         <div class="p-3">
           <!-- <div v-if="hasUnreadMessages(room.id).length" class="text-red-600">
           {{ hasUnreadMessages(room.id).length }} unread messages
