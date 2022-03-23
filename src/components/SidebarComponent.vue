@@ -9,12 +9,15 @@ import IconLogo from './icons/IconLogo.vue'
 import IconSearch from './icons/IconSearch.vue'
 import IconPlus from './icons/IconPlus.vue'
 import { computed } from 'vue'
+import { ref } from 'firebase/storage'
 
 const userStore = useUserStore()
 const roomsStore = useRoomsStore()
 const messagesStore = useMessagesStore()
 const router = useRouter()
 const toast = useToast()
+
+const searchInput = ref('')
 
 async function doLogout() {
   try {
@@ -30,8 +33,8 @@ async function doLogout() {
 const unreadMessages = computed(() => {
   return messagesStore.messages.filter((message) => {
     return (
-      userStore.meta.joined[message.roomId].toMillis() &&
-      userStore.meta.joined[message.roomId].toMillis() <
+      userStore.meta.joined[message.roomId]?.toMillis() &&
+      userStore.meta.joined[message.roomId]?.toMillis() <
         message.createdAt.toMillis()
     )
   })
@@ -71,9 +74,11 @@ const unreadMessages = computed(() => {
         </div>
         <input
           type="text"
-          name="finder"
           placeholder="Search rooms"
           class="input-search"
+          v-model="searchInput"
+          name="search"
+          id="search"
         />
       </div>
       <div>

@@ -1,10 +1,11 @@
 <script setup>
-import { computed } from 'vue'
+import { computed, onMounted, watch } from 'vue'
 import { useMessagesStore } from '@/stores/messages'
 import { useUserStore } from '@/stores/user'
 import { useToast } from 'vue-toastification'
 import { formatRelative } from 'date-fns'
 import { es } from 'date-fns/locale'
+import { ref } from 'vue'
 
 const userStore = useUserStore()
 const messagesStore = useMessagesStore()
@@ -17,38 +18,40 @@ const props = defineProps({
   }
 })
 
+const messages = ref('')
+const chat = ref('')
+
+defineExpose({
+  chat,
+  messages
+})
+
 const roomMessages = computed(() => {
   return messagesStore.messages.filter((message) => message.roomId === props.id)
 })
 
-// onMounted(async () => {
-//   try {
-//     userStore.updateMeta({
-//       roomID: props.id,
-//       exit: false,
-//       uid: userStore.user.uid
-//     })
-//   } catch (error) {
-//     console.log(error.message)
-//     toast.error(error.message)
-//   }
-// })
-// watch(
-//   () => props.id,
-//   async (newId, oldId) => {
-//     userStore.updateMeta({
-//       roomID: oldId,
-//       exit: true,
-//       uid: userStore.user.uid
-//     })
-
-//     userStore.updateMeta({
-//       roomID: newId,
-//       exit: false,
-//       uid: userStore.user.uid
-//     })
-//   }
-// )
+onMounted(async () => {
+  try {
+    userStore.updateMeta({
+      roomID: props.id,
+      exit: false,
+      uid: userStore.user.uid
+    })
+  } catch (error) {
+    console.log(error.message)
+    toast.error(error.message)
+  }
+})
+watch(
+  () => props.id,
+  async (newId, oldId) => {
+    userStore.updateMeta({
+      roomID: oldId,
+      exit: true,
+      uid: userStore.user.uid
+    })
+  }
+)
 
 async function deleteMessage(messageId) {
   try {

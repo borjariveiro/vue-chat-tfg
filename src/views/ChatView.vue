@@ -7,8 +7,10 @@ import { useToast } from 'vue-toastification'
 import { useMessagesStore } from '@/stores/messages'
 // import { formatRelative } from 'date-fns'
 // import { es } from 'date-fns/locale'
+import { useUserStore } from '../stores/user'
 
 // Stores and utils
+const userStore = useUserStore()
 const messagesStore = useMessagesStore()
 const toast = useToast()
 
@@ -27,9 +29,8 @@ const props = defineProps({
 })
 
 // Data
-const chat = ref(null)
 const message = ref(null)
-const messages = ref(null)
+const childRefs = ref(null)
 const image = ref(null)
 const file = ref(null)
 const fileURL = ref(null)
@@ -56,6 +57,11 @@ async function createMessage() {
     scrollDown()
     message.value = ''
     image.value = fileURL.value = null
+    userStore.updateMeta({
+      roomID: props.id,
+      exit: false,
+      uid: userStore.user.uid
+    })
   } catch (error) {
     toast.error(error.message)
     console.log(error.message)
@@ -70,8 +76,8 @@ function onFileChange(event) {
 
 function scrollDown() {
   nextTick(() => {
-    const height = messages.value.scrollHeight
-    chat.value.scrollTo({
+    const height = childRefs.value.messages.scrollHeight
+    childRefs.value.chat.scrollTo({
       top: height,
       behavior: 'smooth'
     })
@@ -109,7 +115,7 @@ function scrollDown() {
     </section>
 
     <!-- Body chat -->
-    <ChatComponent :id="props.id" />
+    <ChatComponent :id="props.id" ref="childRefs" />
 
     <!-- Input chat -->
     <section class="relative w-full h-16 bg-slate-800">
