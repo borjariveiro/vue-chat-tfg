@@ -41,7 +41,7 @@ const hasDataChanged = computed(() => {
 <template>
   <section class="flex flex-col items-center gap-4 pt-10">
     <router-link to="/">
-      <IconLogo />
+      <IconLogo :width="80" :height="80" />
     </router-link>
     <h1 class="text-2xl font-medium text-slate-200">Profile</h1>
     <form

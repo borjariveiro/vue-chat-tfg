@@ -41,17 +41,23 @@ const unreadMessages = computed(() => {
 <template>
   <div class="flex flex-col h-full overflow-hidden border-r border-slate-700">
     <!-- Header -->
-    <header class="flex items-center justify-between h-20 p-1 bg-gray-800">
-      <div class="flex mr-4">
+    <header
+      class="flex items-center justify-between w-full h-20 p-1 bg-gray-800"
+    >
+      <div class="flex mr-2 xl:mr-4">
         <IconLogo :width="50" :height="50" />
         <span
-          class="self-center text-lg font-semibold whitespace-nowrap text-slate-200"
+          class="self-center text-base font-semibold xl:text-xl whitespace-nowrap text-slate-200"
           >VueChat</span
         >
       </div>
       <div class="flex gap-2 xl:gap-4">
-        <router-link to="/profile" class="btn-secondary">Profile </router-link>
-        <button @click="doLogout" class="btn-primary">Logout</button>
+        <router-link to="/profile" class="px-3 xl:px-5 btn-secondary"
+          >Profile
+        </router-link>
+        <button @click="doLogout" class="px-3 xl:px-5 btn-primary">
+          Logout
+        </button>
       </div>
     </header>
 
@@ -76,7 +82,7 @@ const unreadMessages = computed(() => {
     </div>
 
     <!-- Rooms -->
-    <section class="flex flex-col w-full overflow-y-auto">
+    <section class="flex flex-col w-full overflow-x-hidden overflow-y-auto">
       <RoomComponent
         :rooms="roomsStore.rooms"
         :unread-messages="unreadMessages"

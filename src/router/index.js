@@ -10,17 +10,27 @@ const router = createRouter({
       component: () => import('@/views/RoomsView.vue'),
       meta: {
         requiresAuth: true
-      }
+      },
+      children: [
+        {
+          path: '/chat/:id',
+          name: 'chat',
+          props: true,
+          components: {
+            ChatView: () => import('@/views/ChatView.vue')
+          }
+        }
+      ]
     },
-    {
-      path: '/chat/:id',
-      name: 'chat',
-      component: () => import('@/views/ChatView.vue'),
-      props: true,
-      meta: {
-        requiresAuth: true
-      }
-    },
+    // {
+    //   path: '/chat/:id',
+    //   name: 'chat',
+    //   component: () => import('@/views/ChatView.vue'),
+    //   props: true,
+    //   meta: {
+    //     requiresAuth: true
+    //   }
+    // },
     {
       path: '/createRoom',
       name: 'createRoom',

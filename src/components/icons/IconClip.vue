@@ -1,7 +1,7 @@
 <template>
   <svg
-    width="50"
-    height="50"
+    :width="props.width"
+    :height="props.height"
     viewBox="0 0 80 80"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
@@ -15,3 +15,18 @@
     />
   </svg>
 </template>
+
+<script setup>
+import { defineProps } from 'vue'
+
+const props = defineProps({
+  width: {
+    type: Number,
+    required: true
+  },
+  height: {
+    type: Number,
+    required: true
+  }
+})
+</script>

@@ -14,9 +14,10 @@ rootStore.checkAuth()
         <component :is="Component" :key="route.path" />
       </transition>
     </router-view> -->
-    <Transition name="fade" mode="out-in">
+    <!-- <Transition name="fade" mode="out-in">
       <RouterView />
-    </Transition>
+    </Transition> -->
+    <RouterView />
   </main>
 </template>
 

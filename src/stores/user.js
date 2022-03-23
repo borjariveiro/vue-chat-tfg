@@ -106,7 +106,6 @@ export const useUserStore = defineStore('user', {
     async updateMeta({ roomID, exit, uid }) {
       const users = doc(db, 'users', uid)
       const userDoc = await getDoc(users)
-      console.log(userDoc.exists())
 
       if (!userDoc.exists()) {
         await setDoc(users, {})

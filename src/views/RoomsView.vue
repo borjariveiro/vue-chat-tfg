@@ -5,6 +5,7 @@
 // import { useRoomsStore } from '@/stores/rooms'
 // import { useMessagesStore } from '@/stores/messages'
 // import { computed } from 'vue'
+import { RouterView } from 'vue-router'
 import SidebarComponent from '../components/SidebarComponent.vue'
 
 // const userStore = useUserStore()
@@ -25,7 +26,8 @@ import SidebarComponent from '../components/SidebarComponent.vue'
 <template>
   <div class="grid grid-cols-[2fr_5fr] h-full">
     <SidebarComponent />
-    <div class="text-white">Chat</div>
+    <RouterView name="ChatView"></RouterView>
+    <!-- <div class="text-white">Chat</div> -->
   </div>
   <!-- <div
     class="container flex flex-wrap items-center justify-between px-4 mx-auto"

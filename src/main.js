@@ -10,7 +10,7 @@ import '@/index.css'
 import Toast, { POSITION } from 'vue-toastification'
 import 'vue-toastification/dist/index.css'
 const options = {
-  position: POSITION.BOTTOM_RIGHT
+  position: POSITION.BOTTOM_LEFT
 }
 
 const app = createApp(App)

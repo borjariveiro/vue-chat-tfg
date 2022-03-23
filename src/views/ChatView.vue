@@ -1,20 +1,15 @@
 <script setup>
 import IconLogo from '@/components/icons/IconLogo.vue'
 import IconClip from '@/components/icons/IconClip.vue'
-import { ref, nextTick, onMounted, onUnmounted, computed } from 'vue'
-import { useRoomsStore } from '@/stores/rooms'
+import ChatComponent from '@/components/ChatComponent.vue'
+import { ref, nextTick } from 'vue'
 import { useToast } from 'vue-toastification'
-import { useRouter } from 'vue-router'
 import { useMessagesStore } from '@/stores/messages'
-import { useUserStore } from '@/stores/user'
-import { formatRelative } from 'date-fns'
-import { es } from 'date-fns/locale'
+// import { formatRelative } from 'date-fns'
+// import { es } from 'date-fns/locale'
 
 // Stores and utils
-const userStore = useUserStore()
-const roomsStore = useRoomsStore()
 const messagesStore = useMessagesStore()
-const router = useRouter()
 const toast = useToast()
 
 // Props
@@ -22,14 +17,16 @@ const props = defineProps({
   id: {
     type: String,
     required: true
+  },
+  roomName: {
+    type: String
+  },
+  roomDescription: {
+    type: String
   }
 })
 
 // Data
-const room = ref({
-  name: '',
-  description: ''
-})
 const chat = ref(null)
 const message = ref(null)
 const messages = ref(null)
@@ -38,42 +35,19 @@ const file = ref(null)
 const fileURL = ref(null)
 
 //Computed properties
-const roomMessages = computed(() => {
-  return messagesStore.messages.filter((message) => message.roomId === props.id)
-})
-
 const messageImage = () => {
   return URL.createObjectURL(image.value)
 }
 
-onMounted(async () => {
-  try {
-    let roomTemp = await roomsStore.getRoom(props.id)
-    room.value.name = roomTemp.name
-    room.value.description = roomTemp.description
-    userStore.updateMeta({
-      roomID: props.id,
-      exit: false,
-      uid: userStore.user.uid
-    })
-    scrollDown()
-  } catch (error) {
-    console.log(error.message)
-    toast.error(error.message)
-    router.push({ name: 'rooms' })
-  }
-})
-
+// Methods
 async function createMessage() {
   try {
     if (image.value) {
-      console.log('entro')
       fileURL.value = await messagesStore.uploadMessageImage({
         roomId: props.id,
         file: image.value
       })
     }
-    console.log(fileURL.value)
     await messagesStore.createMessage({
       roomId: props.id,
       message: message.value,
@@ -82,32 +56,6 @@ async function createMessage() {
     scrollDown()
     message.value = ''
     image.value = fileURL.value = null
-  } catch (error) {
-    toast.error(error.message)
-    console.log(error.message)
-  }
-}
-
-async function deleteMessage(messageId) {
-  try {
-    const message = roomMessages.value.find((message) => {
-      return message.id === messageId
-    })
-    // console.log(message)
-    // console.log(
-    //   roomMessages.value.find((message) => {
-    //     console.log(message.id === messageId)
-    //     console.log(messageId)
-    //     message.id === messageId
-    //   })
-    // )
-    if (message.image) {
-      await messagesStore.deleteFile(message.image)
-    }
-    await messagesStore.deleteMessage({
-      roomId: props.id,
-      messageId: message.id
-    })
   } catch (error) {
     toast.error(error.message)
     console.log(error.message)
@@ -129,85 +77,64 @@ function scrollDown() {
     })
   })
 }
-
-function timeAgo(timestamp) {
-  const time = new Date(timestamp * 1000)
-  const actualtime = Date.now()
-  return formatRelative(time, actualtime, { locale: es, weekStartsOn: 1 })
-}
-
-onUnmounted(() => {
-  userStore.updateMeta({
-    roomID: props.id,
-    exit: true,
-    uid: userStore.user.uid
-  })
-})
 </script>
 
 <template>
-  <div class="container relative flex justify-center h-5/6">
+  <div class="flex flex-col items-center w-full h-full overflow-hidden">
+    <!-- Header chat -->
     <section
-      class="flex flex-col items-center w-9/12 h-full overflow-y-auto"
-      ref="chat"
+      class="flex items-center justify-between w-full h-20 p-5 bg-gray-800"
     >
-      <h1 class="mb-2 text-3xl text-white">{{ room.name }}</h1>
-      <div ref="messages">
-        <div
-          v-for="message in roomMessages"
-          :key="message.id"
-          class="w-64 px-4 py-3 mb-3 text-white border-2 rounded shadow-md dark:bg-gray-800 dark:border-gray-700"
-          :class="{
-            'dark:bg-emerald-600': message.userId === userStore.getUserUid
-          }"
+      <div class="max-w-lg">
+        <h2
+          :title="props.roomName"
+          class="mb-1 text-xl font-semibold text-white truncate"
         >
-          <button
-            type="button"
-            v-if="message.userId === userStore.getUserUid"
-            @click="deleteMessage(message.id)"
-          >
-            Borrar
-          </button>
-          <div
-            v-if="message.image"
-            class="w-64 h-64 bg-center bg-cover"
-            :style="{ 'background-image': `url(${message.image})` }"
-          ></div>
-          <span
-            v-if="message.userId !== userStore.getUserUid"
-            class="text-sm text-gray-400"
-          >
-            <small
-              >{{ message.userName }} -
-              {{ timeAgo(message.createdAt.seconds) }}</small
-            >
-          </span>
-          <p class="text-white">
-            {{ message.message }}
-          </p>
-        </div>
+          {{ roomName }}
+        </h2>
+        <h3
+          :title="props.roomDescription"
+          class="mb-1 text-sm truncate text-slate-400"
+        >
+          {{ roomDescription }}
+        </h3>
+      </div>
+      <div class="flex gap-2 xl:gap-4">
+        <router-link
+          :to="{ name: 'updateRoom', params: { id: props.id } }"
+          class="btn-secondary"
+          >Edit room
+        </router-link>
       </div>
     </section>
-    <section class="absolute inset-x-0 bottom-0 w-full">
-      <form @submit.prevent="createMessage" class="">
+
+    <!-- Body chat -->
+    <ChatComponent :id="props.id" />
+
+    <!-- Input chat -->
+    <section class="relative w-full h-16 bg-slate-800">
+      <div v-if="image" class="absolute left-2 bottom-16 w-96">
+        <button @click="image = null" class="absolute top-1 right-1">❌</button>
+        <img :src="messageImage()" alt="Image send" class="object-contain" />
+      </div>
+      <form
+        @submit.prevent="createMessage"
+        class="flex items-center justify-center h-full"
+      >
+        <div class="flex items-center justify-center mx-3">
+          <button type="button" @click="file.click()">
+            <IconClip :width="40" :height="40" />
+          </button>
+          <input type="file" @change="onFileChange" ref="file" class="hidden" />
+        </div>
         <input
           v-model="message"
           type="text"
-          placerholder="Message"
-          class="rounded"
+          placeholder="Write a message here"
+          class="w-full pl-3 text-white rounded h-9 bg-slate-700"
         />
-        <div
-          v-if="image"
-          @click="image = null"
-          class="bg-center bg-cover w-80 h-80"
-          :style="{ 'background-image': `url(${messageImage()})` }"
-        ></div>
-        <div class="inline">
-          <button type="button" @click="file.click()"><IconClip /></button>
-          <input type="file" @change="onFileChange" ref="file" class="hidden" />
-        </div>
-        <button :disabled="!message" class="text-white w">
-          <IconLogo :width="50" :height="50" />
+        <button :disabled="!message" class="mx-3 text-white">
+          <IconLogo :width="40" :height="40" class="rotate-90" />
         </button>
       </form>
     </section>

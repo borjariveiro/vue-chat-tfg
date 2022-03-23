@@ -3,6 +3,7 @@ import { ref, onMounted, computed } from 'vue'
 import { useRoomsStore } from '@/stores/rooms'
 import { useToast } from 'vue-toastification'
 import { useRouter } from 'vue-router'
+import IconLogo from '@/components/icons/IconLogo.vue'
 
 // Props
 const props = defineProps({
@@ -104,6 +105,9 @@ function onFileDelete() {
 
 <template>
   <section class="flex flex-col items-center gap-4 pt-10">
+    <router-link to="/">
+      <IconLogo :width="80" :height="80" />
+    </router-link>
     <h1 class="text-2xl font-medium text-slate-200">Edit room</h1>
     <form @submit.prevent="updateRoom" class="p-4 bg-gray-800 rounded-lg w-80">
       <div class="mb-6">
