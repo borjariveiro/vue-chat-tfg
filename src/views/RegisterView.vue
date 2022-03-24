@@ -47,16 +47,21 @@ function resetData() {
     <router-link to="/" class="flex">
       <IconLogo :width="80" :height="80" />
       <h1
-        class="self-center text-2xl font-semibold sm:text-4xl whitespace-nowrap text-slate-200"
+        class="self-center text-2xl font-semibold text-gray-700 sm:text-4xl whitespace-nowrap dark:text-slate-200"
       >
         VueChat
       </h1>
     </router-link>
-    <h2 class="text-2xl font-light sm:text-4xl text-slate-200">
+    <h2
+      class="text-2xl font-light text-gray-700 sm:text-4xl dark:text-slate-200"
+    >
       Create account to VueChat
     </h2>
 
-    <form @submit.prevent="doRegister" class="p-4 bg-gray-800 rounded-lg w-80">
+    <form
+      @submit.prevent="doRegister"
+      class="p-4 bg-gray-200 rounded-lg dark:bg-gray-800 w-80"
+    >
       <div class="mb-4">
         <label
           for="name"

@@ -3,6 +3,7 @@ import { ref, computed } from 'vue'
 import { useUserStore } from '@/stores/user'
 import { useToast } from 'vue-toastification'
 import IconLogo from '@/components/icons/IconLogo.vue'
+import AppearanceComponent from '@/components/AppearanceComponent.vue'
 
 const toast = useToast()
 const userStore = useUserStore()
@@ -43,10 +44,12 @@ const hasDataChanged = computed(() => {
     <router-link to="/">
       <IconLogo :width="80" :height="80" />
     </router-link>
-    <h1 class="text-2xl font-medium text-slate-200">Profile</h1>
+    <h1 class="text-3xl font-medium text-gray-700 dark:text-slate-200">
+      Profile
+    </h1>
     <form
       @submit.prevent="updateProfile"
-      class="p-4 bg-gray-800 rounded-lg w-80"
+      class="p-4 bg-gray-200 rounded-lg dark:bg-gray-800 w-80"
     >
       <div class="mb-4">
         <label
@@ -88,6 +91,9 @@ const hasDataChanged = computed(() => {
           type="password"
           class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-emerald-500 focus:border-emerald-500 block w-full p-2.5 dark:bg-gray-900 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-emerald-500 dark:focus:border-emerald-500 dark:shadow-sm-light"
         />
+      </div>
+      <div class="mb-4">
+        <AppearanceComponent />
       </div>
       <button
         class="w-full px-5 py-2 text-base font-medium text-center text-white rounded-lg bg-emerald-700 hover:bg-emerald-800 focus:ring-4 focus:ring-emerald-300 dark:bg-emerald-600 dark:hover:bg-emerald-700 dark:focus:ring-emerald-800 disabled:opacity-50 disabled:cursor-not-allowed"

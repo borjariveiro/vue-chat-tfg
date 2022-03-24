@@ -53,15 +53,17 @@ async function doLogout() {
 </script>
 
 <template>
-  <div class="flex flex-col h-full overflow-hidden border-r border-slate-700">
+  <div
+    class="flex flex-col h-full overflow-hidden border-r dark:border-slate-700 border-slate-500"
+  >
     <!-- Header -->
     <header
-      class="flex items-center justify-between w-full h-20 p-1 bg-gray-800"
+      class="flex items-center justify-between w-full h-20 p-1 bg-gray-200 dark:bg-gray-800"
     >
       <div class="flex mr-2 xl:mr-4">
         <IconLogo :width="50" :height="50" />
         <span
-          class="self-center text-base font-semibold xl:text-xl whitespace-nowrap text-slate-200"
+          class="self-center text-base font-semibold text-gray-700 xl:text-xl whitespace-nowrap dark:text-slate-200"
           >VueChat</span
         >
       </div>
@@ -93,7 +95,9 @@ async function doLogout() {
         />
       </div>
       <div>
-        <router-link :to="{ name: 'createRoom' }"><IconPlus /></router-link>
+        <router-link :to="{ name: 'createRoom' }"
+          ><IconPlus class="fill-red-700"
+        /></router-link>
       </div>
     </div>
 

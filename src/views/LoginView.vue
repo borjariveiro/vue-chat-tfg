@@ -57,15 +57,20 @@ function resetData() {
     <div class="flex">
       <IconLogo :width="80" :height="80" />
       <h1
-        class="self-center text-3xl font-semibold sm:text-4xl whitespace-nowrap text-slate-200"
+        class="self-center text-3xl font-semibold text-gray-700 sm:text-4xl whitespace-nowrap dark:text-slate-200"
       >
         VueChat
       </h1>
     </div>
-    <h2 class="text-3xl font-light sm:text-4xl text-slate-200">
+    <h2
+      class="text-3xl font-light text-gray-700 sm:text-4xl dark:text-slate-200"
+    >
       Log in to VueChat
     </h2>
-    <form @submit.prevent="doLogin" class="p-4 bg-gray-800 rounded-lg w-80">
+    <form
+      @submit.prevent="doLogin"
+      class="p-4 bg-gray-200 rounded-lg dark:bg-gray-800 w-80"
+    >
       <div class="mb-6">
         <label
           for="email"
@@ -103,7 +108,9 @@ function resetData() {
         </router-link>
       </div>
       <button type="submit" class="btn-primary">Sign in</button>
-      <div class="flex flex-col items-center mt-4 text-slate-400">
+      <div
+        class="flex flex-col items-center mt-4 text-gray-600 dark:text-slate-300"
+      >
         <p>Or log in with</p>
         <button
           @click="doLoginWithGoogle"

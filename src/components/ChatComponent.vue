@@ -103,11 +103,12 @@ function timeAgo(timestamp) {
       <div
         v-for="message in roomMessages"
         :key="message.id"
-        class="self-start h-auto max-w-sm px-4 py-2 text-white break-words rounded shadow-md dark:bg-gray-800"
         :class="{
           'dark:bg-emerald-600': message.userId === userStore.getUserUid,
-          'self-end': message.userId === userStore.getUserUid
+          'self-end': message.userId === userStore.getUserUid,
+          '!bg-emerald-400': message.userId === userStore.getUserUid
         }"
+        class="self-start h-auto max-w-sm px-4 py-2 break-words rounded shadow-md text-slate-900 dark:text-white bg-slate-50 dark:bg-gray-800"
       >
         <div>
           <img
@@ -120,7 +121,7 @@ function timeAgo(timestamp) {
 
         <p
           v-if="message.userId !== userStore.getUserUid"
-          class="text-sm text-gray-400"
+          class="text-sm text-gray-500 dark:text-gray-400"
         >
           <small
             >{{ message.userName }} -
@@ -128,12 +129,12 @@ function timeAgo(timestamp) {
           >
         </p>
 
-        <p class="relative text-white">
+        <p class="relative text-slate-900 dark:text-white">
           <button
             type="button"
             v-if="message.userId === userStore.getUserUid"
             @click="deleteMessage(message.id)"
-            class="absolute font-bold -top-3 -right-3 text-slate-500"
+            class="absolute font-bold -top-3 -right-3 text-slate-400 dark:text-slate-500"
           >
             x
           </button>
@@ -143,5 +144,3 @@ function timeAgo(timestamp) {
     </div>
   </section>
 </template>
-
-=

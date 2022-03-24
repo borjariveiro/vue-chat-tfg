@@ -108,8 +108,13 @@ function onFileDelete() {
     <router-link to="/">
       <IconLogo :width="80" :height="80" />
     </router-link>
-    <h1 class="text-2xl font-medium text-slate-200">Edit room</h1>
-    <form @submit.prevent="updateRoom" class="p-4 bg-gray-800 rounded-lg w-80">
+    <h1 class="text-2xl font-medium text-gray-700 dark:text-slate-200">
+      Edit room
+    </h1>
+    <form
+      @submit.prevent="updateRoom"
+      class="p-4 bg-gray-200 rounded-lg dark:bg-gray-800 w-80"
+    >
       <div class="mb-6">
         <label
           for="Name"
@@ -142,30 +147,30 @@ function onFileDelete() {
       </div>
       <div class="mb-6">
         <div
-          class="w-auto h-40 mb-2 bg-no-repeat bg-contain"
+          class="relative w-auto h-40 mb-2 bg-no-repeat bg-contain"
           :style="{
             'background-image': `url(${roomImage})`
           }"
         >
+          <!-- <img :src="roomImage" alt="" /> -->
           <button
-            href="#"
             v-if="image"
             @click.prevent="onFileDelete"
-            class="float-right font-black text-red-700"
+            class="absolute right-1"
           >
-            X
+            ❌
           </button>
         </div>
 
         <label
           class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-          for="user_avatar"
+          for="room_avatar"
           >Upload file</label
         >
         <input
           class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-          aria-describedby="user_avatar_help"
-          id="user_avatar"
+          aria-describedby="room_avatar_help"
+          id="room_avatar"
           type="file"
           @change="onFileChange"
           ref="file"

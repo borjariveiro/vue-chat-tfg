@@ -14,7 +14,7 @@ function hasUnreadMessages(roomId) {
 <template>
   <div
     v-if="!props.rooms.length"
-    class="flex items-center justify-center text-4xl text-white h-72"
+    class="flex items-center justify-center text-4xl text-slate-900 dark:text-white h-72"
   >
     <h1>No rooms avaibale</h1>
   </div>
@@ -23,7 +23,7 @@ function hasUnreadMessages(roomId) {
     v-else
     v-for="room in props.rooms"
     :key="room.id"
-    class="hover:bg-slate-700"
+    class="dark:hover:bg-slate-700 hover:bg-gray-200"
   >
     <router-link
       :to="{
