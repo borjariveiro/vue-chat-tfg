@@ -42,7 +42,7 @@ function hasUnreadMessages(roomId) {
             <img
               class="object-cover w-16 h-16 rounded-full"
               :src="room.image"
-              :alt="room.description"
+              alt="Room image"
             />
             <span
               v-if="hasUnreadMessages(room.id).length"

@@ -109,7 +109,6 @@ export const useRoomsStore = defineStore('rooms', {
     },
     async removeRoom({ roomID }) {
       const rooms = doc(db, 'rooms', roomID)
-      console.log(rooms)
       const messages = await query(collection(db, `rooms/${roomID}/messages`))
       const unsubscribe = onSnapshot(messages, (querySnapshot) => {
         querySnapshot.forEach(async (document) => {

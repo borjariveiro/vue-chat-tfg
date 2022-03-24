@@ -8,27 +8,26 @@ import RoomComponent from '@/components/RoomComponent.vue'
 import IconLogo from './icons/IconLogo.vue'
 import IconSearch from './icons/IconSearch.vue'
 import IconPlus from './icons/IconPlus.vue'
-import { computed } from 'vue'
-import { ref } from 'firebase/storage'
+import { computed, ref } from 'vue'
 
+// Stores and utils
 const userStore = useUserStore()
 const roomsStore = useRoomsStore()
 const messagesStore = useMessagesStore()
 const router = useRouter()
 const toast = useToast()
 
+// Data
 const searchInput = ref('')
 
-async function doLogout() {
-  try {
-    await userStore.doLogout()
-    toast.success('Sesion cerrada')
-    router.push({ name: 'login' })
-  } catch (error) {
-    toast.error('Error al cerrar sesion')
-    console.log(error.message)
-  }
-}
+// Computed properties
+const filterSearchRooms = computed(() => {
+  return roomsStore.rooms.filter((room) => {
+    return (
+      room.name.toLowerCase().indexOf(searchInput.value.toLowerCase()) != -1
+    )
+  })
+})
 
 const unreadMessages = computed(() => {
   return messagesStore.messages.filter((message) => {
@@ -39,6 +38,18 @@ const unreadMessages = computed(() => {
     )
   })
 })
+
+// Methods
+async function doLogout() {
+  try {
+    await userStore.doLogout()
+    toast.success('Sesion cerrada')
+    router.push({ name: 'login' })
+  } catch (error) {
+    toast.error('Error al cerrar sesion')
+    console.log(error.message)
+  }
+}
 </script>
 
 <template>
@@ -89,7 +100,7 @@ const unreadMessages = computed(() => {
     <!-- Rooms -->
     <section class="flex flex-col w-full overflow-x-hidden overflow-y-auto">
       <RoomComponent
-        :rooms="roomsStore.rooms"
+        :rooms="filterSearchRooms"
         :unread-messages="unreadMessages"
       />
     </section>
