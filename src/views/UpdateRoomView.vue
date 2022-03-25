@@ -4,6 +4,7 @@ import { useRoomsStore } from '@/stores/rooms'
 import { useToast } from 'vue-toastification'
 import { useRouter } from 'vue-router'
 import IconLogo from '@/components/icons/IconLogo.vue'
+import { useHead } from '@vueuse/head'
 
 // Props
 const props = defineProps({
@@ -23,6 +24,10 @@ const imageURL = ref('')
 const file = ref(null)
 const isLoading = ref(false)
 let roomTemp = null
+
+useHead({
+  title: 'VueChat - Update room'
+})
 
 //Computed properties
 const roomImage = computed(() => {

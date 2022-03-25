@@ -4,6 +4,7 @@ import { useUserStore } from '@/stores/user'
 import { useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
 import IconLogo from '@/components/icons/IconLogo.vue'
+import { useHead } from '@vueuse/head'
 
 const userStorage = useUserStore()
 const router = useRouter()
@@ -15,6 +16,10 @@ const userData = ref({
   name: '',
   email: '',
   password: ''
+})
+
+useHead({
+  title: 'VueChat - Register'
 })
 
 async function doRegister() {

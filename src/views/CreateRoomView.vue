@@ -4,6 +4,7 @@ import { useRoomsStore } from '@/stores/rooms'
 import { useToast } from 'vue-toastification'
 import { useRouter } from 'vue-router'
 import IconLogo from '../components/icons/IconLogo.vue'
+import { useHead } from '@vueuse/head'
 
 // Data
 const roomData = ref({
@@ -14,6 +15,10 @@ const roomData = ref({
 const image = ref('')
 const file = ref('')
 const isLoading = ref(false)
+
+useHead({
+  title: 'VueChat - Create room'
+})
 
 // Computed properties
 const roomImage = computed(() => {

@@ -4,6 +4,7 @@ import { useUserStore } from '@/stores/user'
 import { useToast } from 'vue-toastification'
 import IconLogo from '@/components/icons/IconLogo.vue'
 import AppearanceComponent from '@/components/AppearanceComponent.vue'
+import { useHead } from '@vueuse/head'
 
 const toast = useToast()
 const userStore = useUserStore()
@@ -13,6 +14,10 @@ const userData = ref({
   password: ''
 })
 const user = computed(() => userStore.user)
+
+useHead({
+  title: 'VueChat - Profile'
+})
 
 async function updateProfile() {
   try {

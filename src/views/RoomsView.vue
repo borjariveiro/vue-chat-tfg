@@ -1,6 +1,11 @@
 <script setup>
 import { RouterView } from 'vue-router'
-import SidebarComponent from '../components/SidebarComponent.vue'
+import SidebarComponent from '@/components/SidebarComponent.vue'
+import { useHead } from '@vueuse/head'
+
+useHead({
+  title: 'VueChat - Rooms'
+})
 </script>
 
 <template>

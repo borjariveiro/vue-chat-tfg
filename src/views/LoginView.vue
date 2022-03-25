@@ -5,6 +5,7 @@ import { useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
 import IconLogo from '@/components/icons/IconLogo.vue'
 import IconGoogle from '@/components/icons/IconGoogle.vue'
+import { useHead } from '@vueuse/head'
 
 const userStore = useUserStore()
 const router = useRouter()
@@ -13,6 +14,10 @@ const toast = useToast()
 const userData = ref({
   email: '',
   password: ''
+})
+
+useHead({
+  title: 'VueChat - Login'
 })
 
 async function doLogin() {

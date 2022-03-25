@@ -11,6 +11,7 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore"
   },
   "dependencies": {
+    "@vueuse/head": "^0.7.5",
     "date-fns": "^2.28.0",
     "firebase": "^9.6.6",
     "pinia": "^2.0.11",

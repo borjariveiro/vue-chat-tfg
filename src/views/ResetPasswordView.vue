@@ -4,6 +4,7 @@ import { useUserStore } from '@/stores/user'
 import { useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
 import IconLogo from '@/components/icons/IconLogo.vue'
+import { useHead } from '@vueuse/head'
 
 const userStore = useUserStore()
 const router = useRouter()
@@ -12,6 +13,10 @@ const toast = useToast()
 // const isLoading = ref(false)
 const userData = ref({
   email: ''
+})
+
+useHead({
+  title: 'VueChat - Reset password'
 })
 
 async function doResetPassword() {
