@@ -1,39 +1,42 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, reactive } from 'vue'
 import { useUserStore } from '@/stores/user'
 import { useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
+import { useHead } from '@vueuse/head'
 import IconLogo from '@/components/icons/IconLogo.vue'
 import IconGoogle from '@/components/icons/IconGoogle.vue'
-import { useHead } from '@vueuse/head'
 import IconSpinner from '@/components/icons/IconSpinner.vue'
 
+// Stores and utils
 const userStore = useUserStore()
 const router = useRouter()
 const toast = useToast()
-const isLoading = ref(false)
-const userData = ref({
-  email: '',
-  password: ''
-})
-
 useHead({
   title: 'VueChat - Login'
 })
 
+// Data
+const isLoading = ref(false)
+const userData = reactive({
+  email: '',
+  password: ''
+})
+
+// Methods
 async function doLogin() {
   isLoading.value = true
   try {
     await userStore.doLogin({
-      email: userData.value.email,
-      password: userData.value.password
+      email: userData.email,
+      password: userData.password
     })
-    resetData()
     router.push({ name: 'rooms' })
     toast.success('Sesion iniciada')
   } catch (error) {
     toast.error(error.message)
     console.log(error.message)
+    resetData()
   } finally {
     isLoading.value = false
   }
@@ -54,7 +57,7 @@ async function doLoginWithGoogle() {
 }
 
 function resetData() {
-  userData.value.name = userData.value.email = userData.value.password = ''
+  userData.name = userData.email = userData.password = ''
 }
 </script>
 

@@ -1,14 +1,12 @@
 <script setup>
-import IconLogo from '@/components/icons/IconLogo.vue'
-import IconClip from '@/components/icons/IconClip.vue'
-import ChatComponent from '@/components/ChatComponent.vue'
 import { ref, nextTick, computed } from 'vue'
 import { useToast } from 'vue-toastification'
 import { useMessagesStore } from '@/stores/messages'
-// import { formatRelative } from 'date-fns'
-// import { es } from 'date-fns/locale'
-import { useUserStore } from '../stores/user'
+import { useUserStore } from '@/stores/user'
 import { useHead } from '@vueuse/head'
+import ChatComponent from '@/components/ChatComponent.vue'
+import IconClip from '@/components/icons/IconClip.vue'
+import IconLogo from '@/components/icons/IconLogo.vue'
 
 // Stores and utils
 const userStore = useUserStore()
@@ -35,15 +33,14 @@ const childRefs = ref(null)
 const image = ref(null)
 const file = ref(null)
 const fileURL = ref(null)
+const messageImage = () => {
+  return URL.createObjectURL(image.value)
+}
 
 //Computed properties
 const siteTitle = computed(() => {
   return `VueChat - ${props.roomName ?? 'Rooms'}`
 })
-
-const messageImage = () => {
-  return URL.createObjectURL(image.value)
-}
 
 useHead({
   title: siteTitle

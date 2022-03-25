@@ -1,9 +1,11 @@
 <script setup>
+// Props
 const props = defineProps({
   rooms: Array,
   unreadMessages: Array
 })
 
+// Computed properties
 function hasUnreadMessages(roomId) {
   return props.unreadMessages.filter((message) => {
     return message.roomId === roomId

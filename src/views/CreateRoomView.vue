@@ -1,14 +1,23 @@
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, ref, reactive } from 'vue'
 import { useRoomsStore } from '@/stores/rooms'
 import { useToast } from 'vue-toastification'
 import { useRouter } from 'vue-router'
-import IconLogo from '@/components/icons/IconLogo.vue'
 import { useHead } from '@vueuse/head'
+import IconLogo from '@/components/icons/IconLogo.vue'
 import IconSpinner from '@/components/icons/IconSpinner.vue'
 
+// Stores and utils
+const roomsStore = useRoomsStore()
+const router = useRouter()
+const toast = useToast()
+
+useHead({
+  title: 'VueChat - Create room'
+})
+
 // Data
-const roomData = ref({
+const roomData = reactive({
   name: '',
   description: '',
   imageURL: ''
@@ -17,19 +26,10 @@ const image = ref('')
 const file = ref('')
 const isLoading = ref(false)
 
-useHead({
-  title: 'VueChat - Create room'
-})
-
 // Computed properties
 const roomImage = computed(() => {
   return image.value ? URL.createObjectURL(image.value) : ''
 })
-
-// Stores and utils
-const roomsStore = useRoomsStore()
-const router = useRouter()
-const toast = useToast()
 
 // Methods
 async function createRoom() {
@@ -38,15 +38,15 @@ async function createRoom() {
     const roomId = await roomsStore.getNewRoomId()
 
     if (image.value) {
-      roomData.value.imageURL = await roomsStore.uploadRoomImage({
+      roomData.imageURL = await roomsStore.uploadRoomImage({
         roomId,
         file: image.value
       })
     }
     await roomsStore.createRoom({
-      name: roomData.value.name,
-      description: roomData.value.description,
-      image: roomData.value.imageURL,
+      name: roomData.name,
+      description: roomData.description,
+      image: roomData.imageURL,
       roomId
     })
     resetData()
@@ -66,10 +66,7 @@ function onFileChange(event) {
 }
 
 function resetData() {
-  roomData.value.name =
-    roomData.value.description =
-    roomData.value.imageURL =
-      ''
+  roomData.name = roomData.description = roomData.imageURL = ''
 }
 </script>
 

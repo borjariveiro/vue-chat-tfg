@@ -1,33 +1,33 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, reactive } from 'vue'
 import { useUserStore } from '@/stores/user'
 import { useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
-import IconLogo from '@/components/icons/IconLogo.vue'
 import { useHead } from '@vueuse/head'
+import IconLogo from '@/components/icons/IconLogo.vue'
 import IconSpinner from '@/components/icons/IconSpinner.vue'
 
+// Stores and utils
 const userStore = useUserStore()
 const router = useRouter()
 const toast = useToast()
-
-const isLoading = ref(false)
-const userData = ref({
-  email: ''
-})
-
 useHead({
   title: 'VueChat - Reset password'
 })
 
+// Data
+const isLoading = ref(false)
+const userData = reactive({
+  email: ''
+})
+
+// Methods
 async function doResetPassword() {
   isLoading.value = true
   try {
-    await userStore.doResetPassword({ email: userData.value.email })
+    await userStore.doResetPassword({ email: userData.email })
     router.push({ name: 'login' })
-    toast.success(
-      `Please check ${userData.value.email} for further instructions`
-    )
+    toast.success(`Please check ${userData.email} for further instructions`)
   } catch (error) {
     toast.error(error.message)
     console.log(error.message)

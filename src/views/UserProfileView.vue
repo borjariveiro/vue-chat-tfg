@@ -1,39 +1,52 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, reactive } from 'vue'
 import { useUserStore } from '@/stores/user'
+import { useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
-import IconLogo from '@/components/icons/IconLogo.vue'
-import AppearanceComponent from '@/components/AppearanceComponent.vue'
 import { useHead } from '@vueuse/head'
 import IconSpinner from '@/components/icons/IconSpinner.vue'
-import { useRouter } from 'vue-router'
+import IconLogo from '@/components/icons/IconLogo.vue'
+import AppearanceComponent from '@/components/AppearanceComponent.vue'
 
+// Stores and utils
 const toast = useToast()
 const userStore = useUserStore()
 const router = useRouter()
-
-const isLoading = ref(false)
-const userData = ref({
-  name: '',
-  email: '',
-  password: ''
-})
-const user = computed(() => userStore.user)
-
 useHead({
   title: 'VueChat - Profile'
 })
 
+// Data
+const isLoading = ref(false)
+const userData = reactive({
+  name: '',
+  email: '',
+  password: ''
+})
+
+// Computed properties
+const user = computed(() => userStore.user)
+
+const hasDataChanged = computed(() => {
+  // Name exist and is different
+  return (
+    (userData.name && userData.name !== user.value.displayName) ||
+    (userData.email && userData.email !== user.value.email) ||
+    userData.password.length
+  )
+})
+
+// Methods
 async function updateProfile() {
   isLoading.value = true
   try {
     await userStore.updateProfile({
-      name: userData.value.name,
-      email: userData.value.email,
-      password: userData.value.password
+      name: userData.name,
+      email: userData.email,
+      password: userData.password
     })
     toast.success('Update profile')
-    userData.value.name = userData.value.email = userData.value.password = ''
+    userData.name = userData.email = userData.password = ''
     router.push({ name: 'rooms' })
   } catch (error) {
     toast.error(error.message)
@@ -42,15 +55,6 @@ async function updateProfile() {
     isLoading.value = false
   }
 }
-
-const hasDataChanged = computed(() => {
-  // Name exist and is different\
-  return (
-    (userData.value.name && userData.value.name !== user.value.displayName) ||
-    (userData.value.email && userData.value.email !== user.value.email) ||
-    userData.value.password.length
-  )
-})
 </script>
 
 <template>

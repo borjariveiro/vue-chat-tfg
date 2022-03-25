@@ -1,48 +1,50 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, reactive } from 'vue'
 import { useUserStore } from '@/stores/user'
 import { useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
-import IconLogo from '@/components/icons/IconLogo.vue'
 import { useHead } from '@vueuse/head'
+import IconLogo from '@/components/icons/IconLogo.vue'
 import IconSpinner from '@/components/icons/IconSpinner.vue'
 
+// Stores and utils
 const userStorage = useUserStore()
 const router = useRouter()
 const toast = useToast()
+useHead({
+  title: 'VueChat - Register'
+})
 
+// Data
 const isLoading = ref(false)
-const userData = ref({
+const userData = reactive({
   name: '',
   email: '',
   password: ''
 })
 
-useHead({
-  title: 'VueChat - Register'
-})
-
+// Methods
 async function doRegister() {
   isLoading.value = true
   try {
     await userStorage.doRegister({
-      name: userData.value.name,
-      email: userData.value.email,
-      password: userData.value.password
+      name: userData.name,
+      email: userData.email,
+      password: userData.password
     })
     toast.success('Cuenta creada')
-    resetData()
     router.push({ name: 'rooms' })
   } catch (error) {
     toast.error(error.message)
     console.log(error.message)
+    resetData()
   } finally {
     isLoading.value = false
   }
 }
 
 function resetData() {
-  userData.value.name = userData.value.email = userData.value.password = ''
+  userData.name = userData.email = userData.password = ''
 }
 </script>
 

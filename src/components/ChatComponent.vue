@@ -1,16 +1,17 @@
 <script setup>
-import { computed, onMounted, watch } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { useMessagesStore } from '@/stores/messages'
 import { useUserStore } from '@/stores/user'
 import { useToast } from 'vue-toastification'
 import { formatRelative } from 'date-fns'
 import { es } from 'date-fns/locale'
-import { ref } from 'vue'
 
+// Stores and utils
 const userStore = useUserStore()
 const messagesStore = useMessagesStore()
 const toast = useToast()
 
+// Props
 const props = defineProps({
   id: {
     type: String,
@@ -18,6 +19,7 @@ const props = defineProps({
   }
 })
 
+// Data
 const messages = ref('')
 const chat = ref('')
 
@@ -26,10 +28,23 @@ defineExpose({
   messages
 })
 
+// Computed properties
 const roomMessages = computed(() => {
   return messagesStore.messages.filter((message) => message.roomId === props.id)
 })
 
+watch(
+  () => props.id,
+  async (newId, oldId) => {
+    userStore.updateMeta({
+      roomID: oldId,
+      exit: true,
+      uid: userStore.user.uid
+    })
+  }
+)
+
+// Methods
 onMounted(async () => {
   try {
     userStore.updateMeta({
@@ -42,16 +57,6 @@ onMounted(async () => {
     toast.error(error.message)
   }
 })
-watch(
-  () => props.id,
-  async (newId, oldId) => {
-    userStore.updateMeta({
-      roomID: oldId,
-      exit: true,
-      uid: userStore.user.uid
-    })
-  }
-)
 
 async function deleteMessage(messageId) {
   try {
@@ -76,22 +81,6 @@ function timeAgo(timestamp) {
   const actualtime = Date.now()
   return formatRelative(time, actualtime, { locale: es, weekStartsOn: 1 })
 }
-// onUpdated(() => {
-//   userStore.updateMeta({
-//     roomID: props.id,
-//     exit: true,
-//     uid: userStore.user.uid
-//   })
-// })
-
-// onUnmounted(() => {
-//   userStore.updateMeta({
-//     roomID: props.id,
-//     exit: true,
-//     uid: userStore.user.uid
-//   })
-//   console.log('Se desmonta')
-// })
 </script>
 
 <template>

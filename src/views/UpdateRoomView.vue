@@ -3,8 +3,8 @@ import { ref, onMounted, computed } from 'vue'
 import { useRoomsStore } from '@/stores/rooms'
 import { useToast } from 'vue-toastification'
 import { useRouter } from 'vue-router'
-import IconLogo from '@/components/icons/IconLogo.vue'
 import { useHead } from '@vueuse/head'
+import IconLogo from '@/components/icons/IconLogo.vue'
 import IconSpinner from '@/components/icons/IconSpinner.vue'
 
 // Props

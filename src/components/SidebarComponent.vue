@@ -1,4 +1,5 @@
 <script setup>
+import { computed, ref } from 'vue'
 import { useUserStore } from '@/stores/user'
 import { useRoomsStore } from '@/stores/rooms'
 import { useMessagesStore } from '@/stores/messages'
@@ -8,7 +9,6 @@ import RoomComponent from '@/components/RoomComponent.vue'
 import IconLogo from './icons/IconLogo.vue'
 import IconSearch from './icons/IconSearch.vue'
 import IconPlus from './icons/IconPlus.vue'
-import { computed, ref } from 'vue'
 
 // Stores and utils
 const userStore = useUserStore()
