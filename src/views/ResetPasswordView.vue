@@ -5,12 +5,13 @@ import { useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
 import IconLogo from '@/components/icons/IconLogo.vue'
 import { useHead } from '@vueuse/head'
+import IconSpinner from '@/components/icons/IconSpinner.vue'
 
 const userStore = useUserStore()
 const router = useRouter()
 const toast = useToast()
-// const isLogin = ref(true)
-// const isLoading = ref(false)
+
+const isLoading = ref(false)
 const userData = ref({
   email: ''
 })
@@ -20,6 +21,7 @@ useHead({
 })
 
 async function doResetPassword() {
+  isLoading.value = true
   try {
     await userStore.doResetPassword({ email: userData.value.email })
     router.push({ name: 'login' })
@@ -29,6 +31,8 @@ async function doResetPassword() {
   } catch (error) {
     toast.error(error.message)
     console.log(error.message)
+  } finally {
+    isLoading.value = false
   }
 }
 </script>
@@ -67,7 +71,10 @@ async function doResetPassword() {
           class="input-form"
         />
       </div>
-      <button class="btn-primary">Send password reset email</button>
+      <button class="btn-primary">
+        <IconSpinner v-if="isLoading" />
+        <span v-else>Send password reset email</span>
+      </button>
     </form>
   </section>
 </template>

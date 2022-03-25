@@ -5,6 +5,7 @@ import { useToast } from 'vue-toastification'
 import { useRouter } from 'vue-router'
 import IconLogo from '@/components/icons/IconLogo.vue'
 import { useHead } from '@vueuse/head'
+import IconSpinner from '@/components/icons/IconSpinner.vue'
 
 // Props
 const props = defineProps({
@@ -23,6 +24,7 @@ const image = ref('')
 const imageURL = ref('')
 const file = ref(null)
 const isLoading = ref(false)
+const isLoadingDelete = ref(false)
 let roomTemp = null
 
 useHead({
@@ -80,7 +82,7 @@ async function updateRoom() {
   }
 }
 async function removeRoom() {
-  isLoading.value = true
+  isLoadingDelete.value = true
   try {
     await roomsStore.removeRoom({
       roomID: props.id
@@ -92,7 +94,7 @@ async function removeRoom() {
     console.log(error.message)
     router.push({ name: 'rooms' })
   } finally {
-    isLoading.value = false
+    isLoadingDelete.value = false
   }
 }
 
@@ -185,7 +187,8 @@ function onFileDelete() {
         type="submit"
         class="w-full px-5 py-2 text-base font-medium text-center text-white rounded-lg bg-emerald-700 hover:bg-emerald-800 focus:ring-4 focus:ring-emerald-300 dark:bg-emerald-600 dark:hover:bg-emerald-700 dark:focus:ring-emerald-800 disabled:opacity-50 disabled:cursor-not-allowed"
       >
-        Edit
+        <IconSpinner v-if="isLoading" />
+        <span v-else>Save changes</span>
       </button>
     </form>
     <button
@@ -193,7 +196,8 @@ function onFileDelete() {
       @click="removeRoom"
       class="w-auto px-5 py-2 text-base font-medium text-center text-white bg-red-700 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-emerald-300 dark:bg-red-700 dark:hover:bg-red-800 dark:focus:ring-emerald-800 disabled:opacity-50 disabled:cursor-not-allowed"
     >
-      Delete room
+      <IconSpinner v-if="isLoadingDelete" />
+      <span v-else>Delete room</span>
     </button>
   </section>
 </template>

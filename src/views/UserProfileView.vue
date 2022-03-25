@@ -5,9 +5,14 @@ import { useToast } from 'vue-toastification'
 import IconLogo from '@/components/icons/IconLogo.vue'
 import AppearanceComponent from '@/components/AppearanceComponent.vue'
 import { useHead } from '@vueuse/head'
+import IconSpinner from '@/components/icons/IconSpinner.vue'
+import { useRouter } from 'vue-router'
 
 const toast = useToast()
 const userStore = useUserStore()
+const router = useRouter()
+
+const isLoading = ref(false)
 const userData = ref({
   name: '',
   email: '',
@@ -20,6 +25,7 @@ useHead({
 })
 
 async function updateProfile() {
+  isLoading.value = true
   try {
     await userStore.updateProfile({
       name: userData.value.name,
@@ -28,9 +34,12 @@ async function updateProfile() {
     })
     toast.success('Update profile')
     userData.value.name = userData.value.email = userData.value.password = ''
+    router.push({ name: 'rooms' })
   } catch (error) {
     toast.error(error.message)
     console.log(error.message)
+  } finally {
+    isLoading.value = false
   }
 }
 
@@ -104,7 +113,8 @@ const hasDataChanged = computed(() => {
         class="w-full px-5 py-2 text-base font-medium text-center text-white rounded-lg bg-emerald-700 hover:bg-emerald-800 focus:ring-4 focus:ring-emerald-300 dark:bg-emerald-600 dark:hover:bg-emerald-700 dark:focus:ring-emerald-800 disabled:opacity-50 disabled:cursor-not-allowed"
         :disabled="!hasDataChanged"
       >
-        Update profile
+        <IconSpinner v-if="isLoading" />
+        <span v-else>Update profile</span>
       </button>
     </form>
   </section>

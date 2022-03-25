@@ -6,11 +6,12 @@ import { useToast } from 'vue-toastification'
 import IconLogo from '@/components/icons/IconLogo.vue'
 import IconGoogle from '@/components/icons/IconGoogle.vue'
 import { useHead } from '@vueuse/head'
+import IconSpinner from '@/components/icons/IconSpinner.vue'
 
 const userStore = useUserStore()
 const router = useRouter()
 const toast = useToast()
-// const isLoading = ref(false)
+const isLoading = ref(false)
 const userData = ref({
   email: '',
   password: ''
@@ -21,7 +22,7 @@ useHead({
 })
 
 async function doLogin() {
-  // isLoading.value = true
+  isLoading.value = true
   try {
     await userStore.doLogin({
       email: userData.value.email,
@@ -34,12 +35,12 @@ async function doLogin() {
     toast.error(error.message)
     console.log(error.message)
   } finally {
-    // isLoading.value = false
+    isLoading.value = false
   }
 }
 
 async function doLoginWithGoogle() {
-  // isLoading.value = true
+  isLoading.value = true
   try {
     await userStore.doLoginWithGoogle()
     router.push({ name: 'rooms' })
@@ -48,7 +49,7 @@ async function doLoginWithGoogle() {
     toast.error(error.message)
     console.log(error.message)
   } finally {
-    // isLoading.value = false
+    isLoading.value = false
   }
 }
 
@@ -134,7 +135,8 @@ function resetData() {
           to="/register"
           class="text-blue-600 hover:underline dark:text-blue-500"
         >
-          Create and account.
+          <IconSpinner v-if="isLoading" />
+          <span v-else>Create and account</span>
         </router-link>
       </label>
     </div>

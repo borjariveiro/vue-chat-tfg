@@ -3,8 +3,9 @@ import { computed, ref } from 'vue'
 import { useRoomsStore } from '@/stores/rooms'
 import { useToast } from 'vue-toastification'
 import { useRouter } from 'vue-router'
-import IconLogo from '../components/icons/IconLogo.vue'
+import IconLogo from '@/components/icons/IconLogo.vue'
 import { useHead } from '@vueuse/head'
+import IconSpinner from '@/components/icons/IconSpinner.vue'
 
 // Data
 const roomData = ref({
@@ -148,7 +149,8 @@ function resetData() {
         type="submit"
         class="w-full px-5 py-2 text-base font-medium text-center text-white rounded-lg bg-emerald-700 hover:bg-emerald-800 focus:ring-4 focus:ring-emerald-300 dark:bg-emerald-600 dark:hover:bg-emerald-700 dark:focus:ring-emerald-800"
       >
-        Create
+        <IconSpinner v-if="isLoading" />
+        <span v-else>Create</span>
       </button>
     </form>
   </section>

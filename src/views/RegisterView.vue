@@ -5,13 +5,13 @@ import { useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
 import IconLogo from '@/components/icons/IconLogo.vue'
 import { useHead } from '@vueuse/head'
+import IconSpinner from '@/components/icons/IconSpinner.vue'
 
 const userStorage = useUserStore()
 const router = useRouter()
 const toast = useToast()
 
-// const isLogin = ref(true)
-// const isLoading = ref(false)
+const isLoading = ref(false)
 const userData = ref({
   name: '',
   email: '',
@@ -23,7 +23,7 @@ useHead({
 })
 
 async function doRegister() {
-  // isLoading.value = true
+  isLoading.value = true
   try {
     await userStorage.doRegister({
       name: userData.value.name,
@@ -31,14 +31,13 @@ async function doRegister() {
       password: userData.value.password
     })
     toast.success('Cuenta creada')
-
+    resetData()
     router.push({ name: 'rooms' })
   } catch (error) {
     toast.error(error.message)
-    resetData()
     console.log(error.message)
   } finally {
-    // isLoading.value = false
+    isLoading.value = false
   }
 }
 
@@ -118,7 +117,8 @@ function resetData() {
           to="/login"
           class="text-blue-600 hover:underline dark:text-blue-500"
         >
-          Log in.
+          <IconSpinner v-if="isLoading" />
+          <span v-else>Log in</span>
         </router-link>
       </label>
     </div>

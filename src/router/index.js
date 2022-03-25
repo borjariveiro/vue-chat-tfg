@@ -22,15 +22,6 @@ const router = createRouter({
         }
       ]
     },
-    // {
-    //   path: '/chat/:id',
-    //   name: 'chat',
-    //   component: () => import('@/views/ChatView.vue'),
-    //   props: true,
-    //   meta: {
-    //     requiresAuth: true
-    //   }
-    // },
     {
       path: '/createRoom',
       name: 'createRoom',
