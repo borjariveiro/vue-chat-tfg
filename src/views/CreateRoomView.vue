@@ -3,6 +3,7 @@ import { computed, ref } from 'vue'
 import { useRoomsStore } from '@/stores/rooms'
 import { useToast } from 'vue-toastification'
 import { useRouter } from 'vue-router'
+import IconLogo from '../components/icons/IconLogo.vue'
 
 // Data
 const roomData = ref({
@@ -68,8 +69,16 @@ function resetData() {
 
 <template>
   <section class="flex flex-col items-center gap-4 pt-10">
-    <h1 class="text-2xl font-medium text-slate-200">Create room</h1>
-    <form @submit.prevent="createRoom" class="p-4 bg-gray-800 rounded-lg w-80">
+    <router-link to="/">
+      <IconLogo :width="80" :height="80" />
+    </router-link>
+    <h1 class="text-3xl font-medium text-gray-700 dark:text-slate-200">
+      Create room
+    </h1>
+    <form
+      @submit.prevent="createRoom"
+      class="p-4 bg-gray-200 rounded-lg dark:bg-gray-800 w-80"
+    >
       <div class="mb-6">
         <label
           for="Name"
@@ -102,18 +111,17 @@ function resetData() {
       </div>
       <div class="mb-6">
         <div
-          class="w-auto h-40 mb-2 bg-no-repeat bg-contain"
+          class="relative w-auto h-40 mb-2 bg-no-repeat bg-contain"
           :style="{
             'background-image': `url(${roomImage})`
           }"
         >
           <button
-            href="#"
             v-if="image"
             @click.prevent="image = roomData.imageURL = null"
-            class="float-right font-black text-red-700"
+            class="absolute right-1"
           >
-            X
+            ❌
           </button>
         </div>
 

@@ -104,9 +104,8 @@ function timeAgo(timestamp) {
         v-for="message in roomMessages"
         :key="message.id"
         :class="{
-          'dark:bg-emerald-600': message.userId === userStore.getUserUid,
           'self-end': message.userId === userStore.getUserUid,
-          '!bg-emerald-400': message.userId === userStore.getUserUid
+          '!bg-emerald-500': message.userId === userStore.getUserUid
         }"
         class="self-start h-auto max-w-sm px-4 py-2 break-words rounded shadow-md text-slate-900 dark:text-white bg-slate-50 dark:bg-gray-800"
       >
