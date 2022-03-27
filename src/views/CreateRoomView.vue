@@ -42,6 +42,10 @@ async function createRoom() {
         roomId,
         file: image.value
       })
+      console.log(roomData.imageURL)
+    } else {
+      roomData.imageURL =
+        'https://firebasestorage.googleapis.com/v0/b/vue-chat-tfg.appspot.com/o/vuechat-logo.png?alt=media&token=c063883a-4a54-4b56-b01f-2ae1f9501ce2'
     }
     await roomsStore.createRoom({
       name: roomData.name,
