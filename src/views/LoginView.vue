@@ -116,7 +116,10 @@ function resetData() {
           Forgot your password?
         </router-link>
       </div>
-      <button type="submit" class="btn-primary">Sign in</button>
+      <button type="submit" class="btn-primary">
+        <IconSpinner v-if="isLoading" />
+        <span v-else>Sign in</span>
+      </button>
       <div
         class="flex flex-col items-center mt-4 text-gray-600 dark:text-slate-300"
       >
@@ -138,8 +141,6 @@ function resetData() {
           to="/register"
           class="text-blue-600 hover:underline dark:text-blue-500"
         >
-          <IconSpinner v-if="isLoading" />
-          <span v-else>Create and account</span>
         </router-link>
       </label>
     </div>
