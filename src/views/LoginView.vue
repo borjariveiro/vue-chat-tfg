@@ -141,6 +141,7 @@ function resetData() {
           to="/register"
           class="text-blue-600 hover:underline dark:text-blue-500"
         >
+          Create and account
         </router-link>
       </label>
     </div>
