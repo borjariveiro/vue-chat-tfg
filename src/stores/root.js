@@ -18,7 +18,6 @@ export const useRootStore = defineStore('root', {
         if (user) {
           userStore.setUser(user)
           try {
-            await userStore.getMeta()
             await roomsStore.getRooms()
             await messagesStore.getMessages()
           } catch (error) {
@@ -26,7 +25,6 @@ export const useRootStore = defineStore('root', {
             toast.error(error.message)
           }
         } else {
-          userStore.setMeta({})
           userStore.setUserListener(() => {})
 
           roomsStore.setRooms([])

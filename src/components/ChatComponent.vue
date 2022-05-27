@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed } from 'vue'
 import { useMessagesStore } from '@/stores/messages'
 import { useUserStore } from '@/stores/user'
 import { useToast } from 'vue-toastification'
@@ -31,31 +31,6 @@ defineExpose({
 // Computed properties
 const roomMessages = computed(() => {
   return messagesStore.messages.filter((message) => message.roomId === props.id)
-})
-
-watch(
-  () => props.id,
-  async (newId, oldId) => {
-    userStore.updateMeta({
-      roomID: oldId,
-      exit: true,
-      uid: userStore.user.uid
-    })
-  }
-)
-
-// Methods
-onMounted(async () => {
-  try {
-    userStore.updateMeta({
-      roomID: props.id,
-      exit: false,
-      uid: userStore.user.uid
-    })
-  } catch (error) {
-    console.log(error.message)
-    toast.error(error.message)
-  }
 })
 
 async function deleteMessage(messageId) {

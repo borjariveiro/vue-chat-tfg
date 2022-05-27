@@ -2,7 +2,6 @@
 import { computed, ref } from 'vue'
 import { useUserStore } from '@/stores/user'
 import { useRoomsStore } from '@/stores/rooms'
-import { useMessagesStore } from '@/stores/messages'
 import { useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
 import RoomComponent from '@/components/RoomComponent.vue'
@@ -13,7 +12,6 @@ import IconPlus from './icons/IconPlus.vue'
 // Stores and utils
 const userStore = useUserStore()
 const roomsStore = useRoomsStore()
-const messagesStore = useMessagesStore()
 const router = useRouter()
 const toast = useToast()
 
@@ -25,16 +23,6 @@ const filterSearchRooms = computed(() => {
   return roomsStore.rooms.filter((room) => {
     return (
       room.name.toLowerCase().indexOf(searchInput.value.toLowerCase()) != -1
-    )
-  })
-})
-
-const unreadMessages = computed(() => {
-  return messagesStore.messages.filter((message) => {
-    return (
-      userStore.meta.joined[message.roomId]?.toMillis() &&
-      userStore.meta.joined[message.roomId]?.toMillis() <
-        message.createdAt.toMillis()
     )
   })
 })
@@ -103,10 +91,7 @@ async function doLogout() {
 
     <!-- Rooms -->
     <section class="flex flex-col w-full overflow-x-hidden overflow-y-auto">
-      <RoomComponent
-        :rooms="filterSearchRooms"
-        :unread-messages="unreadMessages"
-      />
+      <RoomComponent :rooms="filterSearchRooms" />
     </section>
   </div>
 </template>

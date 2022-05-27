@@ -1,16 +1,8 @@
 <script setup>
 // Props
 const props = defineProps({
-  rooms: Array,
-  unreadMessages: Array
+  rooms: Array
 })
-
-// Computed properties
-function hasUnreadMessages(roomId) {
-  return props.unreadMessages.filter((message) => {
-    return message.roomId === roomId
-  })
-}
 </script>
 
 <template>
@@ -46,12 +38,6 @@ function hasUnreadMessages(roomId) {
               :src="room.image"
               alt="Room image"
             />
-            <span
-              v-if="hasUnreadMessages(room.id).length"
-              class="absolute flex items-center justify-center w-6 h-6 bg-green-500 border-2 rounded-full -right-2 -top-1 text border-slate-300 text-slate-200"
-            >
-              {{ hasUnreadMessages(room.id).length }}</span
-            >
           </div>
         </div>
         <div class="w-3/4 p-3">

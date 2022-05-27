@@ -2,14 +2,12 @@
 import { ref, nextTick, computed } from 'vue'
 import { useToast } from 'vue-toastification'
 import { useMessagesStore } from '@/stores/messages'
-import { useUserStore } from '@/stores/user'
 import { useHead } from '@vueuse/head'
 import ChatComponent from '@/components/ChatComponent.vue'
 import IconClip from '@/components/icons/IconClip.vue'
 import IconLogo from '@/components/icons/IconLogo.vue'
 
 // Stores and utils
-const userStore = useUserStore()
 const messagesStore = useMessagesStore()
 const toast = useToast()
 
@@ -63,11 +61,6 @@ async function createMessage() {
     scrollDown()
     message.value = ''
     image.value = fileURL.value = null
-    userStore.updateMeta({
-      roomID: props.id,
-      exit: false,
-      uid: userStore.user.uid
-    })
   } catch (error) {
     toast.error(error.message)
     console.log(error.message)

@@ -13,25 +13,16 @@ import {
   signInWithPopup
 } from 'firebase/auth'
 import {
-  doc,
   query,
   where,
   getDocs,
-  getDoc,
   collectionGroup,
-  runTransaction,
-  updateDoc,
-  arrayUnion,
-  arrayRemove,
-  setDoc,
-  Timestamp,
-  onSnapshot
+  runTransaction
 } from 'firebase/firestore'
 
 export const useUserStore = defineStore('user', {
   state: () => ({
     user: null,
-    meta: {},
     userListener: () => {}
   }),
   getters: {
@@ -42,9 +33,6 @@ export const useUserStore = defineStore('user', {
   actions: {
     setUser(user) {
       this.user = user
-    },
-    setMeta(meta) {
-      this.meta = meta
     },
     setUserListener(listener) {
       if (listener) {
@@ -102,38 +90,6 @@ export const useUserStore = defineStore('user', {
       }
 
       this.setUser(user)
-    },
-    async updateMeta({ roomID, exit, uid }) {
-      const users = doc(db, 'users', uid)
-      const userDoc = await getDoc(users)
-
-      if (!userDoc.exists()) {
-        await setDoc(users, {})
-      }
-      if (exit) {
-        await updateDoc(users, {
-          connected: arrayRemove(roomID),
-          [`joined.${roomID}`]: Timestamp.fromDate(new Date())
-        })
-      } else {
-        await updateDoc(users, {
-          connected: arrayUnion(roomID),
-          [`joined.${roomID}`]: Timestamp.fromDate(new Date())
-        })
-      }
-    },
-    async getMeta() {
-      const user = doc(db, 'users', this.user.uid)
-      const userDoc = await getDoc(user)
-      if (!userDoc.exists) {
-        await setDoc(user, {})
-      }
-
-      // await updateDoc(user, { connected: [] })
-      const unsubscribe = onSnapshot(user, (doc) => {
-        this.setMeta(doc.data())
-      })
-      this.setUserListener(unsubscribe)
     },
     currentUser() {
       return new Promise((resolve, reject) => {
